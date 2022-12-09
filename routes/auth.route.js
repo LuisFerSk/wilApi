@@ -3,6 +3,7 @@ const { _create, _findByUsername } = require('../controllers/user.controller')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 const { SECRET } = require('../config');
+const { decodeToken } = require('../middleware/authjwt');
 
 const router = express.Router()
 
@@ -45,10 +46,23 @@ router.post('/singin', async (req, res) => {
         return res.status(200).json({
             status: 'success',
             message: 'El usuario ha iniciado sesión correctamente.',
+            username: user.username,
             token
         })
     } catch (error) {
         return res.status(500).json(error.message);
+    }
+})
+
+router.get('/verify-token', async (req, res) => {
+    let decryptedToken;
+
+    try {
+        decryptedToken = decodeToken(req);
+        res.status(200).json(decryptedToken)
+    }
+    catch (err) {
+        res.status(500).json(err.message)
     }
 })
 
