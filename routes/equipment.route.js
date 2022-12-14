@@ -1,5 +1,5 @@
 const express = require('express')
-const { _create, _findAll, _update, _destroy } = require('../controllers/equipment.controller')
+const { _create, _findAll, _update, _destroy, _findOne } = require('../controllers/equipment.controller')
 const { verifyUser } = require('../middleware/authjwt')
 
 const router = express.Router()
@@ -36,12 +36,17 @@ router.get(`/${baseUrl}/find-all`, verifyUser, async (req, res) => {
 
 router.put(`/${baseUrl}/update`, verifyUser, async (req, res) => {
     try {
+        const foundEquipment = await _findOne(req.body.id)
+
+        if (!foundEquipment) {
+            return res.status(400).json(`El equipo no existe.`)
+        }
+
         const updatedRows = await _update(req.body)
 
         return res.status(200).json({
             status: 'success',
             message: 'El equipo se actualizo correctamente correctamente.',
-            updatedRows
         })
     } catch (error) {
         return res.status(500).json(error.message);

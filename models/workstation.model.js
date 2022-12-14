@@ -1,25 +1,19 @@
 const Sequelize = require('sequelize-oracle')
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('user', {
+    return sequelize.define('workstation', {
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-        username: {
+        name: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
             validates: { uniqueness: true },
-            len: [5, 20]
+            len: [2, 50]
         },
-        password: {
-            type: Sequelize.STRING,
-            required: true,
-            allowNull: false,
-            len: [8, 50]
-        }
     }, {
         underscored: true,
         paranoid: true

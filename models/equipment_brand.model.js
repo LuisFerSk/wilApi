@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize-oracle')
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('role', {
+    return sequelize.define('equipment_brand', {
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-            len: [3, 25]
+            validates: { uniqueness: true },
+            len: [2, 25]
         },
     }, {
         underscored: true,

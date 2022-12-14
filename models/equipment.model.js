@@ -13,18 +13,6 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             len: [3, 25]
         },
-        brand: {
-            type: Sequelize.STRING,
-            required: true,
-            allowNull: false,
-            len: [3, 25]
-        },
-        model: {
-            type: Sequelize.STRING,
-            required: true,
-            allowNull: false,
-            len: [3, 25]
-        },
         serial: {
             type: Sequelize.STRING,
             required: true,

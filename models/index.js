@@ -3,7 +3,6 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize-oracle');
-
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
@@ -35,5 +34,18 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+//Associations
+db.equipment_brand.hasMany(db.equipment)
+db.equipment.belongsTo(db.equipment_brand)
+
+db.equipment.hasMany(db.maintenance)
+db.maintenance.belongsTo(db.equipment)
+
+db.equipment_user.hasMany(db.maintenance)
+db.maintenance.belongsTo(db.equipment_user)
+
+db.workstation.hasMany(db.maintenance)
+db.maintenance.belongsTo(db.workstation)
 
 module.exports = db;

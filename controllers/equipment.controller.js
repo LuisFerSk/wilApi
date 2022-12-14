@@ -1,6 +1,6 @@
 const { create } = require('../services/equipment/create')
 const { destroy } = require('../services/equipment/destroy')
-const { findAll } = require('../services/equipment/find')
+const { findAll, findOne } = require('../services/equipment/find')
 const { update } = require('../services/equipment/update')
 
 async function _create(equipment) {
@@ -19,9 +19,14 @@ async function _destroy(equipment) {
     return await destroy(equipment)
 }
 
+async function _findOne(id) {
+    return await findOne(id)
+}
+
 module.exports = {
     _create,
     _findAll,
     _update,
     _destroy,
+    _findOne
 }
