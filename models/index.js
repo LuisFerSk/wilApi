@@ -36,16 +36,10 @@ db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
 //Associations
-db.equipment_brand.hasMany(db.equipment)
-db.equipment.belongsTo(db.equipment_brand)
-
 db.equipment.hasMany(db.maintenance)
 db.maintenance.belongsTo(db.equipment)
 
 db.equipment_user.hasMany(db.maintenance)
 db.maintenance.belongsTo(db.equipment_user)
-
-db.workstation.hasMany(db.maintenance)
-db.maintenance.belongsTo(db.workstation)
 
 module.exports = db;

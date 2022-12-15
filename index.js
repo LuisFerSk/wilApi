@@ -21,6 +21,8 @@ app.use(express.json())
 //routes
 app.use(require('./routes/auth.route'))
 app.use(require('./routes/equipment.route'))
+app.use(require('./routes/equipment_user.route'))
+app.use(require('./routes/maintenance.route'))
 
 // Start server
 app.listen(app.get('port'), () => {

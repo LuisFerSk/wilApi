@@ -15,8 +15,8 @@ async function _update(equipment) {
     return await update(equipment)
 }
 
-async function _destroy(equipment) {
-    return await destroy(equipment)
+async function _destroy(id) {
+    return await destroy(id)
 }
 
 async function _findOne(id) {

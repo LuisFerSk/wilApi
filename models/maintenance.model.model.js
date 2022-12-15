@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
             required: true,
             allowNull: false
         },
+        workstation: {
+            type: Sequelize.STRING,
+            len: [3, 30]
+        },
         ignition_station: {
             type: Sequelize.BOOLEAN,
         },
