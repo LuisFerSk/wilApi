@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
+            validator: {
+                is: /^[A-Z]+$/
+            },
             len: [5, 50]
         },
         cc: {
@@ -27,7 +30,25 @@ module.exports = (sequelize, DataTypes) => {
             validator: {
                 is: /^[0-9]+$/
             },
-            len:[7,10]
+            len: [7, 10]
+        },
+        city: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validator: {
+                is: /^[A-Z]+$/
+            },
+            len: [2, 25]
+        },
+        campus: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validator: {
+                is: /^[A-Z]+$/
+            },
+            len: [2, 50]
         }
     }, {
         underscored: true,

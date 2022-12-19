@@ -3,9 +3,10 @@ const Sequelize = require('sequelize-oracle')
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('maintenance', {
         id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
+            type: Sequelize.UUID,
+            primaryKey: true,
+            len: [6],
+            required: true,
         },
         date: {
             type: Sequelize.DATEONLY,

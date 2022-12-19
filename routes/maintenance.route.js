@@ -1,6 +1,6 @@
 const express = require('express')
 const { _create, _findAll, _destroy } = require('../controllers/maintenance.controller')
-const { verifyUser } = require('../middleware/authjwt')
+const { verifyUser, decodeToken } = require('../middleware/authjwt')
 
 const router = express.Router()
 
@@ -8,7 +8,11 @@ const baseUrl = 'maintenance'
 
 router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
     try {
-        const equipment_user = await _create(req.body)
+        const decryptedToken = decodeToken(req)
+
+        const maintenance = { ...req.body, user_id: decryptedToken.id }
+
+        const equipment_user = await _create(maintenance)
 
         return res.status(201).json({
             status: 'success',
