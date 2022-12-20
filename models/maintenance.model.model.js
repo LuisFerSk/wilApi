@@ -84,6 +84,10 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             len: [0, 200]
         },
+        end_error_description: {
+            type: Sequelize.STRING,
+            len: [0, 200]
+        },
         check_anti_virus: {
             type: Sequelize.BOOLEAN,
         },

@@ -10,7 +10,7 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
     try {
         const decryptedToken = decodeToken(req)
 
-        const maintenance = { ...req.body, user_id: decryptedToken.id }
+        const maintenance = { ...req.body, user_id: decryptedToken.info.id }
 
         const equipment_user = await _create(maintenance)
 
