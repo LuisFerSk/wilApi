@@ -32,24 +32,6 @@ module.exports = (sequelize, DataTypes) => {
             },
             len: [7, 10]
         },
-        city: {
-            type: Sequelize.STRING,
-            required: true,
-            allowNull: false,
-            validator: {
-                is: /^[A-Z]+$/
-            },
-            len: [2, 25]
-        },
-        campus: {
-            type: Sequelize.STRING,
-            required: true,
-            allowNull: false,
-            validator: {
-                is: /^[A-Z]+$/
-            },
-            len: [2, 50]
-        }
     }, {
         underscored: true,
         paranoid: true

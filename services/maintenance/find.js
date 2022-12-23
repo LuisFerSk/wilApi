@@ -16,5 +16,6 @@ async function findAllByUser(id) {
 }
 
 module.exports = {
-    findAll
+    findAll,
+    findAllByUser
 }

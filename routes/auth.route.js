@@ -1,5 +1,5 @@
 const express = require('express')
-const { _create, _findByUsername } = require('../controllers/user.controller')
+const { _findByUsername, _createSupport, _createAdministrator } = require('../controllers/user.controller')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken');
 const { SECRET } = require('../config');
@@ -15,7 +15,26 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json(`El usuario ${foundUser.username} ya existe.`)
         }
 
-        const user = await _create(req.body)
+        const user = await _createSupport(req.body)
+
+        return res.status(201).json({
+            status: 'success',
+            message: `El usuario ${user.username} fue creado correctamente.`
+        })
+    } catch (error) {
+        return res.status(500).json(error.message);
+    }
+})
+
+router.post('/signup-administrator', async (req, res) => {
+    try {
+        const foundUser = await _findByUsername(req.body.username)
+
+        if (foundUser) {
+            return res.status(400).json(`El usuario ${foundUser.username} ya existe.`)
+        }
+
+        const user = await _createAdministrator(req.body)
 
         return res.status(201).json({
             status: 'success',
@@ -36,9 +55,16 @@ router.post('/singin', async (req, res) => {
 
         if (!match) return res.status(400).json('Usuario o contraseña incorrecta.')
 
+        const { id, username, role } = user
+
+        const basicUser = {
+            username,
+            role,
+        }
+
         const dataToken = {
-            id: user.id,
-            username: user.username,
+            id,
+            ...basicUser
         }
 
         const token = jwt.sign(dataToken, SECRET, { expiresIn: '1d' });
@@ -46,7 +72,7 @@ router.post('/singin', async (req, res) => {
         return res.status(200).json({
             status: 'success',
             message: 'El usuario ha iniciado sesión correctamente.',
-            username: user.username,
+            info: { ...basicUser },
             token
         })
     } catch (error) {

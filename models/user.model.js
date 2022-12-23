@@ -19,6 +19,14 @@ module.exports = (sequelize, DataTypes) => {
             required: true,
             allowNull: false,
             len: [8, 50]
+        },
+        role: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validator: {
+                isIn: [['administrator', 'support']]
+            }
         }
     }, {
         underscored: true,

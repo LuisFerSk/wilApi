@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             len: [6],
             required: true,
+            allowNull: false
+
         },
         date: {
             type: Sequelize.DATEONLY,
@@ -120,6 +122,11 @@ module.exports = (sequelize, DataTypes) => {
         }, observations: {
             type: Sequelize.STRING,
             len: [0, 200]
+        },
+        state: {
+            type: Sequelize.BOOLEAN,
+            required: true,
+            allowNull: false
         }
     }, {
         underscored: true,

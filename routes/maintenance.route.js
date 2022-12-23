@@ -1,12 +1,13 @@
 const express = require('express')
 const { _create, _findAll, _destroy } = require('../controllers/maintenance.controller')
 const { verifyUser, decodeToken } = require('../middleware/authjwt')
+const upload = require('../middleware/storage')
 
 const router = express.Router()
 
 const baseUrl = 'maintenance'
 
-router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
+router.post(`/${baseUrl}/create`, verifyUser, upload.single('signature'), async (req, res) => {
     try {
         const decryptedToken = decodeToken(req)
 
