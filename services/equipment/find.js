@@ -17,5 +17,5 @@ async function findOne(id) {
 
 module.exports = {
     findAll,
-    findOne
+    findOne,
 }

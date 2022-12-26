@@ -1,6 +1,6 @@
 const db = require('../../models')
 
-async function create(equipment) {
+async function create(equipment, transaction = undefined) {
     if (!equipment.type) throw new Error('Falta el tipo de equipo.')
     if (!equipment.brand) throw new Error('Falta la marca del equipo.')
     if (!equipment.model) throw new Error('Falta el modelo del equipo.')
@@ -10,7 +10,7 @@ async function create(equipment) {
     if (!equipment.area) throw new Error('Falta el area en donde esta ubicado el equipo.')
     if (!equipment.flat) throw new Error('Falta el piso en donde esta ubicado el equipo.')
 
-    return await db.equipment.create(equipment);
+    return await db.equipment.create(equipment, { transaction });
 }
 
 module.exports = {

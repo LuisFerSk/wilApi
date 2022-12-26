@@ -1,4 +1,6 @@
 const express = require('express')
+const { _findOrCreate } = require('../controllers/brand.controller')
+const { transaction } = require('../controllers/db.controller')
 const { _create, _findAll, _update, _destroy, _findOne } = require('../controllers/equipment.controller')
 const { verifyUser } = require('../middleware/authjwt')
 
@@ -7,8 +9,20 @@ const router = express.Router()
 const baseUrl = 'equipment'
 
 router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
+    const _transaction = await transaction();
+
     try {
-        const equipment = await _create(req.body)
+        const [findBrand, createBrand] = await _findOrCreate(req.body.brand, _transaction)
+
+        if (findBrand) {
+            req.body = { ...req.body, brand_id: findBrand.id }
+        } else {
+            req.body = { ...req.body, brand_id: createBrand.id }
+        }
+
+        const equipment = await _create(req.body, _transaction)
+
+        await _transaction.commit()
 
         return res.status(201).json({
             status: 'success',
@@ -16,6 +30,8 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
             info: equipment
         })
     } catch (error) {
+        await _transaction.rollback()
+
         return res.status(500).json(error.message);
     }
 })

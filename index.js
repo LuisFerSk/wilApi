@@ -2,9 +2,11 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const db = require('./models')
+const { _initAdministrator } = require('./controllers/user.controller')
 
 //initialization
 const app = express()
+_initAdministrator()
 
 // Middleware
 app.set('port', process.env.PORT || 3001)

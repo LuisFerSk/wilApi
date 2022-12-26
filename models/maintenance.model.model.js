@@ -15,6 +15,18 @@ module.exports = (sequelize, DataTypes) => {
             required: true,
             allowNull: false
         },
+        city: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            len: [3, 50]
+        },
+        campus: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            len: [3, 50]
+        },
         workstation: {
             type: Sequelize.STRING,
             len: [3, 30]

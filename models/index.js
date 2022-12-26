@@ -45,4 +45,7 @@ db.maintenance.belongsTo(db.equipment_user)
 db.user.hasMany(db.maintenance)
 db.maintenance.belongsTo(db.user)
 
+db.brand.hasMany(db.equipment)
+db.equipment.belongsTo(db.brand)
+
 module.exports = db;

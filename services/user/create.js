@@ -23,7 +23,19 @@ async function createAdministrator(user) {
     });
 }
 
+async function initAdministrator() {
+    return await db.user.findOrCreate({
+        where: { username: 'admin' },
+        defaults: {
+            username: 'admin',
+            password: bcrypt.hashSync('12345678', 10),
+            role: 'administrator'
+        }
+    })
+}
+
 module.exports = {
     createSupport,
-    createAdministrator
+    createAdministrator,
+    initAdministrator
 }

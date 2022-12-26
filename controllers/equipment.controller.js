@@ -3,8 +3,8 @@ const { destroy } = require('../services/equipment/destroy')
 const { findAll, findOne } = require('../services/equipment/find')
 const { update } = require('../services/equipment/update')
 
-async function _create(equipment) {
-    return await create(equipment)
+async function _create(equipment, transaction = undefined) {
+    return await create(equipment, transaction)
 }
 
 async function _findAll() {
