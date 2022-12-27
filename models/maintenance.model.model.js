@@ -135,11 +135,6 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             len: [0, 200]
         },
-        state: {
-            type: Sequelize.BOOLEAN,
-            required: true,
-            allowNull: false
-        }
     }, {
         underscored: true,
         paranoid: true

@@ -2,7 +2,7 @@ const db = require('../../models')
 
 async function findAll() {
     return await db.maintenance.findAll({
-        include: [db.equipment_user, db.equipment]
+        include: [db.equipment_user, db.equipment, db.user]
     });
 }
 
@@ -15,7 +15,17 @@ async function findAllByUser(id) {
     });
 }
 
+async function findOne(id) {
+    return await db.maintenance.findOne({
+        include: [db.equipment_user, db.equipment],
+        where: {
+            id
+        }
+    })
+}
+
 module.exports = {
     findAll,
-    findAllByUser
+    findAllByUser,
+    findOne,
 }
