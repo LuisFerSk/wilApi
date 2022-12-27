@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { SECRET } = require('../config');
+const { SECRET, ROLE_ADMINISTRATOR } = require('../config');
 const { _findById } = require('../controllers/user.controller');
 
 
@@ -26,17 +26,22 @@ function decodeToken(req) {
     }
 }
 
-function verifyUser(req, res, next = () => { }) {
+async function verifyUser(req, res, next = () => { }) {
     let decryptedToken;
 
     try {
         decryptedToken = decodeToken(req);
-    }
-    catch (err) {
-        throw res.status(500).json(err.message)
-    }
 
-    next()
+        const { info: { id } } = decryptedToken;
+
+        const user = await _findById(id)
+
+        if (!user) return res.status(400).json('El token ya expiro.')
+
+        next()
+    } catch (error) {
+        return res.status(500).json(error.message);
+    }
 }
 
 async function verifyAdmin(req, res, next) {
@@ -44,18 +49,14 @@ async function verifyAdmin(req, res, next) {
 
     try {
         decryptedToken = decodeToken(req);
-    }
-    catch (err) {
-        throw res.status(500).json(err.message)
-    }
 
-    const { info: { id } } = decryptedToken;
+        const { info: { id } } = decryptedToken;
 
-    try {
-        const user = await _findById(req.body.id)
+        const user = await _findById(id)
 
-        if (!user) return res.status(400).json('El token no es correcto.')
-
+        if (!user) return res.status(400).json('El token ya expiro.')
+        if (user.role !== ROLE_ADMINISTRATOR) return res.status(400).json('No tienes permisos para realizar esta acción.')
+        
         next()
     } catch (error) {
         return res.status(500).json(error.message);

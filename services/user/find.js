@@ -1,3 +1,4 @@
+const { ROLE_SUPPORT } = require('../../config')
 const db = require('../../models')
 
 async function findByUsername(username) {
@@ -20,7 +21,16 @@ async function findById(id) {
     })
 }
 
+async function findAllSupport() {
+    return await db.user.findAll({
+        where: {
+            role: ROLE_SUPPORT
+        }
+    })
+}
+
 module.exports = {
     findByUsername,
-    findById
+    findById,
+    findAllSupport,
 }
