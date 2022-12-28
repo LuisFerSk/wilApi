@@ -1,5 +1,5 @@
 const { create } = require('../services/maintenance/create')
-const { destroy } = require('../services/maintenance/destroy')
+const { destroy, destroyWhere } = require('../services/maintenance/destroy')
 const { findAll, findOne, findAllByUser } = require('../services/maintenance/find')
 
 async function _create(maintenance) {
@@ -22,10 +22,15 @@ async function _findAllByUser(id) {
     return await findAllByUser(id)
 }
 
+async function _destroyWhere(where, transaction = undefined) {
+    return await destroyWhere(where, transaction)
+}
+
 module.exports = {
     _create,
     _findAll,
     _destroy,
     _findOne,
     _findAllByUser,
+    _destroyWhere,
 }

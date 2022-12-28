@@ -1,6 +1,8 @@
 const express = require('express')
+const { transaction } = require('../controllers/db.controller')
 const { _create, _findAll, _findOne, _destroy, _update } = require('../controllers/equipment_user.controller')
 const { verifyUser } = require('../middleware/authjwt')
+const maintenanceController = require('../controllers/maintenance.controller')
 
 const router = express.Router()
 
@@ -54,15 +56,24 @@ router.put(`/${baseUrl}/update`, verifyUser, async (req, res) => {
 })
 
 router.delete(`/${baseUrl}/destroy`, verifyUser, async (req, res) => {
+    const _transaction = await transaction();
+
     try {
-        const result = await _destroy(req.body.id)
+        const equipment_user_id = req.body.id;
+
+        await _destroy(equipment_user_id, _transaction)
+
+        const where = { equipment_user_id }
+
+        await maintenanceController._destroyWhere(where, _transaction)
 
         return res.status(200).json({
             status: 'success',
             message: 'El usuario se elimino correctamente correctamente.',
-            result
         })
     } catch (error) {
+        await _transaction.rollback()
+
         return res.status(500).json(error.message);
     }
 })

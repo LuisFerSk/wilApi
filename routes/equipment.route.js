@@ -3,6 +3,7 @@ const { _findOrCreate } = require('../controllers/brand.controller')
 const { transaction } = require('../controllers/db.controller')
 const { _create, _findAll, _update, _destroy, _findOne } = require('../controllers/equipment.controller')
 const { verifyUser } = require('../middleware/authjwt')
+const maintenanceController = require('../controllers/maintenance.controller')
 
 const router = express.Router()
 
@@ -70,15 +71,24 @@ router.put(`/${baseUrl}/update`, verifyUser, async (req, res) => {
 })
 
 router.delete(`/${baseUrl}/destroy`, verifyUser, async (req, res) => {
+    const _transaction = await transaction();
+
     try {
-        const result = await _destroy(req.body.id)
+        const equipment_id = req.body.id
+
+        await _destroy(equipment_id, _transaction)
+
+        const where = { equipment_id }
+
+        await maintenanceController._destroyWhere(where, _transaction)
 
         return res.status(200).json({
             status: 'success',
             message: 'El equipo se elimino correctamente correctamente.',
-            result
         })
     } catch (error) {
+        await _transaction.rollback()
+
         return res.status(500).json(error.message);
     }
 })
