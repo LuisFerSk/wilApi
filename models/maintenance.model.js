@@ -3,7 +3,7 @@ const Sequelize = require('sequelize-oracle')
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('maintenance', {
         id: {
-            type: Sequelize.UUID,
+            type: Sequelize.STRING,
             primaryKey: true,
             len: [6],
             required: true,
@@ -135,6 +135,11 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             len: [0, 200]
         },
+        signature: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false
+        }
     }, {
         underscored: true,
         paranoid: true

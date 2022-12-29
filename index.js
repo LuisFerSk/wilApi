@@ -28,6 +28,8 @@ app.use(require('./routes/maintenance.route'))
 app.use(require('./routes/brand.route'))
 app.use(require('./routes/support.route'))
 
+app.use(express.static('storage'))
+
 // Start server
 app.listen(app.get('port'), () => {
     console.log('Server running on port 3001')

@@ -1,5 +1,4 @@
 const express = require('express')
-const multer = require('multer')
 const { _create, _findAll, _destroy, _findOne, _findAllByUser } = require('../controllers/maintenance.controller')
 const { verifyUser, decodeToken, verifyAdmin } = require('../middleware/authjwt')
 const upload = require('../middleware/storage')
@@ -10,7 +9,6 @@ const baseUrl = 'maintenance'
 
 router.post(`/${baseUrl}/create`, verifyUser, upload.single('signature'), async (req, res) => {
     try {
-
         const file = req.file
 
         if (!file) {
@@ -19,7 +17,11 @@ router.post(`/${baseUrl}/create`, verifyUser, upload.single('signature'), async 
 
         const decryptedToken = decodeToken(req)
 
-        const data = { ...req.body, user_id: decryptedToken.info.id }
+        const data = {
+            ...req.body,
+            user_id: decryptedToken.info.id,
+            signature: `/imgs/${file.filename}`
+        }
 
         const maintenance = await _create(data)
 

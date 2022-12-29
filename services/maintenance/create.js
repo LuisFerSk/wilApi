@@ -8,8 +8,9 @@ async function create(maintenance, transaction = undefined) {
     if (!maintenance.user_id) throw new Error('El id del soporte es requerida.')
     if (!maintenance.city) throw new Error('la ciudad es requerida.')
     if (!maintenance.campus) throw new Error('La sede es requerida.')
+    if (!maintenance.signature) throw new Error('La firma es requerida.')
 
-    maintenance.id = uuid.v4().slice(0, 6)
+    maintenance.id = uuid.v4().slice(0, 6).trim()
 
     return await db.maintenance.create(maintenance, { transaction });
 }
