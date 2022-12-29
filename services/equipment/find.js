@@ -1,7 +1,9 @@
 const db = require('../../models')
 
 async function findAll() {
-    return await db.equipment.findAll()
+    return await db.equipment.findAll({
+        include: [db.brand]
+    })
 }
 
 async function findOne(id) {
@@ -11,7 +13,8 @@ async function findOne(id) {
         where: {
             id,
             deleted_at: null
-        }
+        },
+        include: [db.brand]
     })
 }
 

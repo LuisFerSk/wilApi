@@ -2,6 +2,7 @@ const express = require('express')
 const { _create, _findAll, _destroy, _findOne, _findAllByUser } = require('../controllers/maintenance.controller')
 const { verifyUser, decodeToken, verifyAdmin } = require('../middleware/authjwt')
 const upload = require('../middleware/storage')
+const { ROLE_ADMINISTRATOR, ROLE_SUPPORT } = require('../config')
 
 const router = express.Router()
 
@@ -39,7 +40,19 @@ router.post(`/${baseUrl}/create`, verifyUser, upload.single('signature'), async 
 
 router.get(`/${baseUrl}/find-all`, verifyAdmin, async (req, res) => {
     try {
-        const maintenances = await _findAll()
+        const decryptedToken = decodeToken(req)
+
+        let maintenances;
+
+        const user = decryptedToken.info;
+
+        if (user.role === ROLE_ADMINISTRATOR) {
+            maintenances = await _findAll()
+        }
+
+        if (user.role === ROLE_SUPPORT) {
+            maintenances = await _findAllByUser(user.id)
+        }
 
         return res.status(200).json({
             status: 'success',
