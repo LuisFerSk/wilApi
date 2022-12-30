@@ -1,5 +1,5 @@
 const express = require('express')
-const { _create, _findAll, _destroy, _findOne, _findAllByUser } = require('../controllers/maintenance.controller')
+const { _create, _findAll, _destroy, _findOne, _findAllByUser, _findMadePerDayByUser, _findMadePerDay } = require('../controllers/maintenance.controller')
 const { verifyUser, decodeToken, verifyAdmin } = require('../middleware/authjwt')
 const upload = require('../middleware/storage')
 const { ROLE_ADMINISTRATOR, ROLE_SUPPORT } = require('../config')
@@ -38,7 +38,7 @@ router.post(`/${baseUrl}/create`, verifyUser, upload.single('signature'), async 
     }
 })
 
-router.get(`/${baseUrl}/find-all`, verifyAdmin, async (req, res) => {
+router.get(`/${baseUrl}/find-all`, verifyUser, async (req, res) => {
     try {
         const decryptedToken = decodeToken(req)
 
@@ -64,16 +64,26 @@ router.get(`/${baseUrl}/find-all`, verifyAdmin, async (req, res) => {
     }
 })
 
-router.get(`/${baseUrl}/find-by-user`, verifyUser, async (req, res) => {
+router.get(`/${baseUrl}/find-made-per-day`, verifyUser, async (req, res) => {
     try {
         const decryptedToken = decodeToken(req)
 
-        const maintenances = await _findAllByUser(decryptedToken.info.id)
+        let query;
+
+        const user = decryptedToken.info;
+
+        if (user.role === ROLE_ADMINISTRATOR) {
+            query = await _findMadePerDay()
+        }
+
+        if (user.role === ROLE_SUPPORT) {
+            query = await _findMadePerDayByUser(user.id)
+        }
 
         return res.status(200).json({
             status: 'success',
             message: 'la información de los mantenimientos se consultaron correctamente correctamente.',
-            info: maintenances
+            info: query
         })
     } catch (error) {
         return res.status(500).json(error.message);
