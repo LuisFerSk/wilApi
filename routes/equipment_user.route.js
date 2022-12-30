@@ -44,11 +44,14 @@ router.put(`/${baseUrl}/update`, verifyUser, async (req, res) => {
             return res.status(400).json(`El usuario no existe.`)
         }
 
-        const updatedRows = await _update(req.body)
+        await _update(req.body)
+
+        const equipment_user = await _findOne(req.body.id)
 
         return res.status(200).json({
             status: 'success',
             message: 'El usuario se actualizo correctamente correctamente.',
+            info: equipment_user
         })
     } catch (error) {
         return res.status(500).json(error.message);

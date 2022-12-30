@@ -23,12 +23,14 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
 
         const equipment = await _create(req.body, _transaction)
 
+        const _equipment = await _findOne(equipment.id)
+
         await _transaction.commit()
 
         return res.status(201).json({
             status: 'success',
             message: `El equipo fue creado correctamente.`,
-            info: equipment
+            info: _equipment
         })
     } catch (error) {
         await _transaction.rollback()
@@ -52,6 +54,8 @@ router.get(`/${baseUrl}/find-all`, verifyUser, async (req, res) => {
 })
 
 router.put(`/${baseUrl}/update`, verifyUser, async (req, res) => {
+    const _transaction = await transaction();
+
     try {
         const foundEquipment = await _findOne(req.body.id)
 
@@ -59,13 +63,28 @@ router.put(`/${baseUrl}/update`, verifyUser, async (req, res) => {
             return res.status(400).json(`El equipo no existe.`)
         }
 
-        const updatedRows = await _update(req.body)
+        const [findBrand, createBrand] = await _findOrCreate(req.body.brand, _transaction)
+
+        if (findBrand) {
+            req.body = { ...req.body, brand_id: findBrand.id }
+        } else {
+            req.body = { ...req.body, brand_id: createBrand.id }
+        }
+
+        await _update(req.body)
+
+        const _equipment = await _findOne(req.body.id)
+
+        await _transaction.commit()
 
         return res.status(200).json({
             status: 'success',
             message: 'El equipo se actualizo correctamente correctamente.',
+            info: _equipment
         })
     } catch (error) {
+        await _transaction.rollback()
+
         return res.status(500).json(error.message);
     }
 })
