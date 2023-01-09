@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const { SECRET, ROLE_ADMINISTRATOR } = require('../config');
 const { _findById } = require('../controllers/user.controller');
 
-
 function decodeToken(req) {
     const token = req.headers['x-access-token'];
 

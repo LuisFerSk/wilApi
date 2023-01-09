@@ -68,9 +68,9 @@ router.get(`/${baseUrl}/find-made-per-day`, verifyUser, async (req, res) => {
     try {
         const decryptedToken = decodeToken(req)
 
-        let query;
-
         const user = decryptedToken.info;
+
+        let query;
 
         if (user.role === ROLE_ADMINISTRATOR) {
             query = await _findMadePerDay()
