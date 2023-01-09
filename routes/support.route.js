@@ -1,5 +1,5 @@
 const express = require('express')
-const { _findByUsername, _createSupport, _findAllSupport } = require('../controllers/user.controller')
+const { _findByUsername, _createSupport, _findAllSupport, _updatePassword } = require('../controllers/user.controller')
 const { verifyAdmin } = require('../middleware/authjwt');
 
 const router = express.Router()
@@ -34,6 +34,19 @@ router.get(`/${baseUrl}/find-all`, verifyAdmin, async (req, res) => {
             status: 'success',
             message: 'Los soportes se consultaron correctamente correctamente.',
             info: supports
+        })
+    } catch (error) {
+        return res.status(500).json(error.message);
+    }
+})
+
+router.put(`/${baseUrl}/change-password`, verifyAdmin, async (req, res) => {
+    try {
+        await _updatePassword(req.body)
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Se actualizo correctamente la contraseña del soporte.'
         })
     } catch (error) {
         return res.status(500).json(error.message);

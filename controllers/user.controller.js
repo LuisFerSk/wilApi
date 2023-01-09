@@ -1,5 +1,6 @@
 const { createSupport, createAdministrator, initAdministrator } = require('../services/user/create')
 const { findByUsername, findById, findAllSupport } = require('../services/user/find')
+const { updatePassword } = require('../services/user/update')
 
 async function _createSupport(user) {
     return await createSupport(user)
@@ -25,6 +26,10 @@ async function _findAllSupport() {
     return await findAllSupport()
 }
 
+async function _updatePassword(user) {
+    return await updatePassword(user)
+}
+
 module.exports = {
     _createSupport,
     _findByUsername,
@@ -32,4 +37,5 @@ module.exports = {
     _createAdministrator,
     _initAdministrator,
     _findAllSupport,
+    _updatePassword,
 }
