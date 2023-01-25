@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
             len: [6],
             required: true,
             allowNull: false
-
         },
         date: {
             type: Sequelize.DATEONLY,
@@ -16,12 +15,6 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         city: {
-            type: Sequelize.STRING,
-            required: true,
-            allowNull: false,
-            len: [3, 50]
-        },
-        campus: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
@@ -131,7 +124,8 @@ module.exports = (sequelize, DataTypes) => {
             validator: {
                 isIn: [['buena', 'regular', 'malo']]
             }
-        }, observations: {
+        },
+        observations: {
             type: Sequelize.STRING,
             len: [0, 200]
         },

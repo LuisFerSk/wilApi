@@ -1,13 +1,12 @@
 const express = require('express')
 const { _findOrCreate } = require('../controllers/brand.controller')
 const { transaction } = require('../controllers/db.controller')
-const { _create, _findAll, _update, _destroy, _findOne } = require('../controllers/equipment.controller')
+const { _create, _findAll, _update, _destroy, _findOne } = require('../controllers/printer_scanner.controller')
 const { verifyUser } = require('../middleware/authjwt')
-const maintenanceController = require('../controllers/maintenance.controller')
 
 const router = express.Router()
 
-const baseUrl = 'equipment'
+const baseUrl = 'printer_scanner'
 
 router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
     const _transaction = await transaction();
@@ -31,7 +30,7 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
 
         return res.status(201).json({
             status: 'success',
-            message: `El equipo fue creado correctamente.`,
+            message: `La impresora o scanner fue creado correctamente.`,
             info: _equipment
         })
     } catch (error) {
@@ -47,7 +46,7 @@ router.get(`/${baseUrl}/find-all`, verifyUser, async (req, res) => {
 
         return res.status(200).json({
             status: 'success',
-            message: 'Los equipos se consultaron correctamente correctamente.',
+            message: 'Las impresoras y scanners se consultaron correctamente correctamente.',
             info: equipments
         })
     } catch (error) {
@@ -62,7 +61,7 @@ router.put(`/${baseUrl}/update`, verifyUser, async (req, res) => {
         const foundEquipment = await _findOne(req.body.id)
 
         if (!foundEquipment) {
-            return res.status(400).json(`El equipo no existe.`)
+            return res.status(400).json(`La impresora o scanner no existe.`)
         }
 
         let data = req.body;
@@ -87,7 +86,7 @@ router.put(`/${baseUrl}/update`, verifyUser, async (req, res) => {
 
         return res.status(200).json({
             status: 'success',
-            message: 'El equipo se actualizo correctamente correctamente.',
+            message: 'La impresora o scanner se actualizo correctamente correctamente.',
             info: _equipment
         })
     } catch (error) {
@@ -98,24 +97,16 @@ router.put(`/${baseUrl}/update`, verifyUser, async (req, res) => {
 })
 
 router.delete(`/${baseUrl}/destroy`, verifyUser, async (req, res) => {
-    const _transaction = await transaction();
-
     try {
         const equipment_id = req.body.id
 
-        await _destroy(equipment_id, _transaction)
-
-        const where = { equipment_id }
-
-        await maintenanceController._destroyWhere(where, _transaction)
+        await _destroy(equipment_id)
 
         return res.status(200).json({
             status: 'success',
-            message: 'El equipo se elimino correctamente correctamente.',
+            message: 'La impresora o scanner se elimino correctamente correctamente.',
         })
     } catch (error) {
-        await _transaction.rollback()
-
         return res.status(500).json(error.message);
     }
 })

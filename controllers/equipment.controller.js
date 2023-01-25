@@ -12,7 +12,7 @@ async function _findAll() {
 }
 
 async function _update(equipment) {
-    return await update(equipment)
+        return await update(equipment)
 }
 
 async function _destroy(id, transaction = undefined) {

@@ -10,7 +10,6 @@ function formatDateApi(date, daysSetting = 0) {
 }
 
 const includeFindOne = [
-    db.equipment_user,
     db.user,
     {
         model: db.equipment,

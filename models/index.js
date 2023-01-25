@@ -39,13 +39,13 @@ db.Sequelize = Sequelize;
 db.equipment.hasMany(db.maintenance)
 db.maintenance.belongsTo(db.equipment)
 
-db.equipment_user.hasMany(db.maintenance)
-db.maintenance.belongsTo(db.equipment_user)
-
 db.user.hasMany(db.maintenance)
 db.maintenance.belongsTo(db.user)
 
 db.brand.hasMany(db.equipment)
 db.equipment.belongsTo(db.brand)
+
+db.brand.hasMany(db.printer_scanner)
+db.printer_scanner.belongsTo(db.brand)
 
 module.exports = db;

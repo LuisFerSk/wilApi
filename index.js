@@ -23,7 +23,7 @@ app.use(express.json())
 //routes
 app.use(require('./routes/auth.route'))
 app.use(require('./routes/equipment.route'))
-app.use(require('./routes/equipment_user.route'))
+app.use(require('./routes/printer_scanner.route'))
 app.use(require('./routes/maintenance.route'))
 app.use(require('./routes/brand.route'))
 app.use(require('./routes/support.route'))
@@ -35,7 +35,7 @@ app.listen(app.get('port'), () => {
     console.log('Server running on port 3001')
 })
 
-//Test connection
+//Test connections
 db.sequelize
     .sync({ alter: true })
     .then(() => console.log('Connection has been established successfully.'))
