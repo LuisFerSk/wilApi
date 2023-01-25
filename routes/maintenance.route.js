@@ -1,6 +1,6 @@
 const express = require('express')
 const { _create, _findAll, _destroy, _findOne, _findAllByUser, _findMadePerDayByUser, _findMadePerDay } = require('../controllers/maintenance.controller')
-const { verifyUser, decodeToken, verifyAdmin } = require('../middleware/authjwt')
+const { verifyUser, decodeToken } = require('../middleware/authjwt')
 const upload = require('../middleware/storage')
 const { ROLE_ADMINISTRATOR, ROLE_SUPPORT } = require('../config')
 
