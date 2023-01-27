@@ -1,26 +1,30 @@
 const { create } = require('../services/equipment/create')
 const { destroy } = require('../services/equipment/destroy')
-const { findAll, findOne } = require('../services/equipment/find')
+const { findAll, findOne, findByPlate } = require('../services/equipment/find')
 const { update } = require('../services/equipment/update')
 
-async function _create(equipment, transaction = undefined) {
-    return await create(equipment, transaction)
+function _create(equipment, transaction = undefined) {
+    return create(equipment, transaction)
 }
 
-async function _findAll() {
-    return await findAll()
+function _findAll() {
+    return findAll()
 }
 
-async function _update(equipment) {
-        return await update(equipment)
+function _update(equipment) {
+    return update(equipment)
 }
 
-async function _destroy(id, transaction = undefined) {
-    return await destroy(id, transaction)
+function _destroy(id, transaction = undefined) {
+    return destroy(id, transaction)
 }
 
-async function _findOne(id) {
-    return await findOne(id)
+function _findOne(id) {
+    return findOne(id)
+}
+
+function _findByPlate(plate, transaction = undefined) {
+    return findByPlate(plate, transaction)
 }
 
 module.exports = {
@@ -28,5 +32,6 @@ module.exports = {
     _findAll,
     _update,
     _destroy,
-    _findOne
+    _findOne,
+    _findByPlate,
 }

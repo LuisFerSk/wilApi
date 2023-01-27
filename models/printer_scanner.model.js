@@ -53,29 +53,39 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-            validator: {
-                is: /^[A-Z]+$/
+            validate: {
+                is: /^[A-Z]+$/,
+                len: [5, 50]
             },
-            len: [5, 50]
         },
         cc: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-            validator: {
-                is: /^[0-9]+$/
+            validate: {
+                is: /^[0-9]+$/,
+                len: [7, 11]
             },
-            len: [7, 11]
         },
         phone: {
             type: Sequelize.STRING,
-            validator: {
-                is: /^[0-9]+$/
+            validate: {
+                is: /^[0-9]+$/,
+                len: [7, 10]
             },
-            len: [7, 10]
         },
     }, {
         underscored: true,
-        paranoid: true
+        paranoid: true,
+        indexes: [
+            {
+                unique: true,
+                fields: ['cc']
+            },
+            {
+                unique: true,
+                fields: ['serial']
+            }
+        ]
     })
 }

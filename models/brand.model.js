@@ -11,8 +11,12 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-            validates: { uniqueness: true },
-            len: [2, 30]
+            validate: {
+                len: {
+                    args: [2, 30],
+                    msg: 'La marca deber tener de 2 a 30 caracteres.'
+                }
+            },
         },
     }, {
         underscored: true,

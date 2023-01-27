@@ -5,9 +5,11 @@ module.exports = (sequelize, DataTypes) => {
         id: {
             type: Sequelize.STRING,
             primaryKey: true,
-            len: [6],
             required: true,
-            allowNull: false
+            allowNull: false,
+            validate: {
+                len: [6]
+            }
         },
         date: {
             type: Sequelize.DATEONLY,
@@ -18,11 +20,12 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-            len: [3, 50]
         },
         workstation: {
             type: Sequelize.STRING,
-            len: [3, 30]
+            validate: {
+                len: [3, 30]
+            }
         },
         ignition_station: {
             type: Sequelize.BOOLEAN,
@@ -89,11 +92,12 @@ module.exports = (sequelize, DataTypes) => {
         },
         error_description: {
             type: Sequelize.STRING,
-            len: [0, 200]
         },
         end_error_description: {
             type: Sequelize.STRING,
-            len: [0, 200]
+            validate: {
+                len: [0, 200]
+            }
         },
         check_anti_virus: {
             type: Sequelize.BOOLEAN,
@@ -109,25 +113,16 @@ module.exports = (sequelize, DataTypes) => {
         },
         Q1: {
             type: Sequelize.STRING,
-            validator: {
-                isIn: [['buena', 'regular', 'malo']]
-            }
         },
         Q2: {
             type: Sequelize.STRING,
-            validator: {
-                isIn: [['buena', 'regular', 'malo']]
-            }
         },
         Q3: {
             type: Sequelize.STRING,
-            validator: {
-                isIn: [['buena', 'regular', 'malo']]
-            }
+            allowNull: true,
         },
         observations: {
             type: Sequelize.STRING,
-            len: [0, 200]
         },
         signature: {
             type: Sequelize.STRING,

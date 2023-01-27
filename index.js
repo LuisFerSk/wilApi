@@ -6,7 +6,6 @@ const { _initAdministrator } = require('./controllers/user.controller')
 
 //initialization
 const app = express()
-_initAdministrator()
 
 // Middleware
 app.set('port', process.env.PORT || 3001)
@@ -40,3 +39,6 @@ db.sequelize
     .sync({ alter: true })
     .then(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error))
+
+_initAdministrator()
+//

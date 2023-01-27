@@ -3,24 +3,28 @@ const { destroy } = require('../services/printer_scanner/destroy')
 const { findAll, findOne } = require('../services/printer_scanner/find')
 const { update } = require('../services/printer_scanner/update')
 
-async function _create(printer_scanner, transaction = undefined) {
-    return await create(printer_scanner, transaction)
+function _create(printer_scanner, transaction = undefined) {
+    return create(printer_scanner, transaction)
 }
 
-async function _findAll() {
-    return await findAll()
+function _findAll() {
+    return findAll()
 }
 
-async function _update(printer_scanner) {
-        return await update(printer_scanner)
+function _update(printer_scanner) {
+    return update(printer_scanner)
 }
 
-async function _destroy(id, transaction = undefined) {
-    return await destroy(id, transaction)
+function _destroy(id, transaction = undefined) {
+    return destroy(id, transaction)
 }
 
-async function _findOne(id) {
-    return await findOne(id)
+function _findOne(id) {
+    return findOne(id)
+}
+
+function _findByPlate(plate, transaction = undefined) {
+    return findByPlate(plate, transaction)
 }
 
 module.exports = {
@@ -28,5 +32,6 @@ module.exports = {
     _findAll,
     _update,
     _destroy,
-    _findOne
+    _findOne,
+    _findByPlate
 }

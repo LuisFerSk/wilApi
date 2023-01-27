@@ -11,21 +11,28 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-            validates: { uniqueness: true },
-            len: [5, 20]
+            validate: {
+                len: {
+                    args: [5, 20],
+                    msg: 'El nombre de usuario debe tener de 5 a 20 caracteres.'
+                }
+            },
+
         },
         password: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-            len: [8, 50]
         },
         role: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-            validator: {
-                isIn: [['administrator', 'support']]
+            validate: {
+                isIn: {
+                    args: [['administrator', 'support']],
+                    msg: 'El rol no es valido.'
+                }
             }
         }
     }, {
