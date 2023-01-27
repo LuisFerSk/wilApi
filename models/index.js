@@ -3,10 +3,6 @@
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize-oracle');
-
-// const oracledb = require('oracledb');
-// oracledb.initOracleClient({ configDir: '/opt/oracle/your_config_dir' });
-
 const process = require('process');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
@@ -38,5 +34,18 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+//Associations
+db.equipment.hasMany(db.maintenance)
+db.maintenance.belongsTo(db.equipment)
+
+db.user.hasMany(db.maintenance)
+db.maintenance.belongsTo(db.user)
+
+db.brand.hasMany(db.equipment)
+db.equipment.belongsTo(db.brand)
+
+db.brand.hasMany(db.printer_scanner)
+db.printer_scanner.belongsTo(db.brand)
 
 module.exports = db;

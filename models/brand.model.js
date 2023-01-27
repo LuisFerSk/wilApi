@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize-oracle')
 
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('role', {
+    return sequelize.define('brand', {
         id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
@@ -11,7 +11,12 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-            len: [3, 25]
+            validate: {
+                len: {
+                    args: [2, 30],
+                    msg: 'La marca deber tener de 2 a 30 caracteres.'
+                }
+            },
         },
     }, {
         underscored: true,
