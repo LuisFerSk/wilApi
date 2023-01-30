@@ -1,10 +1,9 @@
 const express = require('express')
 const { _findOrCreate } = require('../controllers/brand.controller')
 const { transaction } = require('../controllers/db.controller')
-const { _create, _findAll, _update, _destroy, _findOne, _findByPlate, _validate } = require('../controllers/equipment.controller')
+const { _create, _findAll, _update, _destroy, _findOne, _findByPlate } = require('../controllers/equipment.controller')
 const { verifyUser, verifyAdmin } = require('../middleware/authjwt')
 const maintenanceController = require('../controllers/maintenance.controller')
-const db = require('../models')
 
 const router = express.Router()
 
@@ -54,7 +53,7 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
             return res.status(500).json('El serial ya ha sido registrado para otro equipo.')
         }
 
-        return res.status(500).json(errorMessage.split('Validation error: ').join('').replace('.', ''));
+        return res.status(500).json(errorMessage.replaceAll('Validation error: ', '').replaceAll('.', '').concat('.'));
     }
 })
 
@@ -126,7 +125,7 @@ router.put(`/${baseUrl}/update`, verifyAdmin, async (req, res) => {
             return res.status(500).json('El serial ya ha sido registrado para otro equipo.')
         }
 
-        return res.status(500).json(errorMessage.split('Validation error: ').join('').replace('.', ''));
+        return res.status(500).json(errorMessage.replaceAll('Validation error: ', '').replaceAll('.', '').concat('.'));
     }
 })
 
