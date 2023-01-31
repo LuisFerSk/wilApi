@@ -83,10 +83,11 @@ router.put(`/${baseUrl}/update`, verifyAdmin, async (req, res) => {
 
         let data = req.body;
 
-        if (data.license_plate) {
+
+        if (data.license_plate && foundEquipment.license_plate !== data.license_plate) {
             const findPlate = await _findByPlate(data.license_plate, _transaction)
 
-            if (findPlate) throw Error('La placa de la impresora o scanner ya esta registrada.')
+            if (findPlate) throw Error('La placa del equipo ya esta registrada.')
         }
 
         const { brand } = data;
