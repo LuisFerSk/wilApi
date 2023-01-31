@@ -1,8 +1,6 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-const db = require('./models')
-const { _initAdministrator } = require('./controllers/user.controller')
 
 //initialization
 const app = express()
@@ -34,11 +32,13 @@ app.listen(app.get('port'), () => {
     console.log('Server running on port 3001')
 })
 
-//Test connections
-db.sequelize
-    .sync({ force: true })
-    .then(() => console.log('Connection has been established successfully.'))
-    .catch(error => console.error('Unable to connect to the database:', error))
 
+// const db = require('./models')
+// db.sequelize
+//     .sync({ force: true })
+//     .then(() => console.log('Connection has been established successfully.'))
+//     .catch(error => console.error('Unable to connect to the database:', error))
+
+
+const { _initAdministrator } = require('./controllers/user.controller')
 _initAdministrator()
-//
