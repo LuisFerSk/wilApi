@@ -52,7 +52,7 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
             return res.status(500).json('El serial ya ha sido registrado para otra impresora o scanner.')
         }
 
-        return res.status(500).json(errorMessage.split('Validation error: ').join('').replace('.', ''));
+        return res.status(500).json(errorMessage.replaceAll('Validation error: ', '').replaceAll('.', '').concat('.'));
     }
 })
 
@@ -124,7 +124,7 @@ router.put(`/${baseUrl}/update`, verifyAdmin, async (req, res) => {
             return res.status(500).json('El serial ya ha sido registrado para otra impresora o scanner.')
         }
 
-        return res.status(500).json(errorMessage.split('Validation error: ').join('').replace('.', ''));
+        return res.status(500).json(errorMessage.replaceAll('Validation error: ', '').replaceAll('.', '').concat('.'));
     }
 })
 

@@ -47,15 +47,6 @@ module.exports = (sequelize, DataTypes) => {
                 }
             },
         },
-        monitor_serial: {
-            type: Sequelize.STRING,
-            validate: {
-                len: {
-                    args: [3, 25],
-                    msg: 'El serial del monitor del equipo debe ser una cadena de 3 a 25 caracteres.'
-                }
-            }
-        },
         license_plate: {
             type: Sequelize.STRING,
             allowNull: true,
@@ -70,6 +61,28 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
 
+        },
+        monitor_serial: {
+            type: Sequelize.STRING,
+            validate: {
+                len: {
+                    args: [3, 25],
+                    msg: 'El serial del monitor del equipo debe ser una cadena de 3 a 25 caracteres.'
+                }
+            }
+        },
+        monitor_license_plate: {
+            type: Sequelize.STRING,
+            validate: {
+                is: {
+                    args: /^[0-9]+$/,
+                    msg: 'La placa del monitor solo puede contener números.'
+                },
+                len: {
+                    args: [4, 5],
+                    msg: 'La placa del monitor debe tener de 4 a 5 dígitos.'
+                },
+            }
         },
         campus: {
             type: Sequelize.STRING,
