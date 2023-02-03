@@ -1,7 +1,7 @@
 const db = require('../../models')
 
-async function destroy(id, transaction = undefined) {
-    return await db.equipment.destroy({
+function destroy(id, transaction = undefined) {
+    return db.equipment.destroy({
         where: {
             id
         },

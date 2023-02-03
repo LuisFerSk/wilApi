@@ -1,16 +1,21 @@
 const { findOrCreate } = require('../services/brand/create')
-const { findAll } = require('../services/brand/find')
+const { findAllByEquipment, findAllByPrinterScanner } = require('../services/brand/find')
 
-async function _findOrCreate(brand, transaction = undefined) {
-    return await findOrCreate(brand, transaction)
+function _findOrCreate(brand, transaction = undefined) {
+    return findOrCreate(brand, transaction)
 }
 
-async function _findAll() {
-    return await findAll()
+function _findAllByEquipment() {
+    return findAllByEquipment()
+}
+
+function _findAllByPrinterScanner() {
+    return findAllByPrinterScanner()
 }
 
 
 module.exports = {
     _findOrCreate,
-    _findAll,
+    _findAllByEquipment,
+    _findAllByPrinterScanner,
 }

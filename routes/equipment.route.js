@@ -13,7 +13,9 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
     const _transaction = await transaction();
 
     try {
-        const [findBrand, createBrand] = await _findOrCreate(req.body.brand, _transaction)
+        const newBrand = { name: req.body.brand, type: 'equipment' }
+
+        const [findBrand, createBrand] = await _findOrCreate(newBrand, _transaction)
 
         if (req.body.license_plate) {
             const findPlate = await _findByPlate(req.body.license_plate, _transaction)
@@ -93,7 +95,9 @@ router.put(`/${baseUrl}/update`, verifyAdmin, async (req, res) => {
         const { brand } = data;
 
         if (brand) {
-            const [findBrand, createBrand] = await _findOrCreate(brand, _transaction)
+            const newBrand = { name: brand, type: 'equipment' }
+
+            const [findBrand, createBrand] = await _findOrCreate(newBrand, _transaction)
 
             if (findBrand) {
                 data = { ...data, brand_id: findBrand.id }

@@ -1,9 +1,22 @@
 const db = require('../../models')
 
-async function findAll() {
-    return await db.brand.findAll()
+function findAllByEquipment() {
+    return db.brand.findAll({
+        where: {
+            type: 'equipment'
+        }
+    })
+}
+
+function findAllByPrinterScanner() {
+    return db.brand.findAll({
+        where: {
+            type: 'printer_scanner'
+        }
+    })
 }
 
 module.exports = {
-    findAll,
+    findAllByPrinterScanner,
+    findAllByEquipment,
 }

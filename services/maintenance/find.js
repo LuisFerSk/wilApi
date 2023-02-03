@@ -17,14 +17,14 @@ const includeFindOne = [
     }
 ]
 
-async function findAll() {
-    return await db.maintenance.findAll({
+function findAll() {
+    return db.maintenance.findAll({
         include: includeFindOne
     });
 }
 
-async function findAllByUser(id) {
-    return await db.maintenance.findAll({
+function findAllByUser(id) {
+    return db.maintenance.findAll({
         include: includeFindOne,
         where: {
             user_id: id
@@ -32,8 +32,8 @@ async function findAllByUser(id) {
     });
 }
 
-async function findOne(id) {
-    return await db.maintenance.findOne({
+function findOne(id) {
+    return db.maintenance.findOne({
         include: includeFindOne,
         where: {
             id
@@ -56,8 +56,8 @@ function getFindMadePerDayBetween() {
     return [formatDateApi(today, -31), formatDateApi(today)]
 }
 
-async function findMadePerDay() {
-    return await db.maintenance.findAll({
+function findMadePerDay() {
+    return db.maintenance.findAll({
         ...findMadePerDayProps,
         where: {
             date: {
@@ -67,8 +67,8 @@ async function findMadePerDay() {
     })
 }
 
-async function findMadePerDayByUser(id) {
-    return await db.maintenance.findAll({
+function findMadePerDayByUser(id) {
+    return db.maintenance.findAll({
         ...findMadePerDayProps,
         where: {
             user_id: id,

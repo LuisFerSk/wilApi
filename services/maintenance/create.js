@@ -1,7 +1,7 @@
 const db = require('../../models')
 const uuid = require('uuid')
 
-async function create(maintenance, transaction = undefined) {
+function create(maintenance, transaction = undefined) {
     if (!maintenance.date) throw new Error('La fecha del mantenimiento es requerida.')
     if (!maintenance.equipment_id) throw new Error('El id del equipo al que se le realizo mantenimiento es requerida.')
     if (!maintenance.user_id) throw new Error('El id del soporte es requerida.')
@@ -10,7 +10,7 @@ async function create(maintenance, transaction = undefined) {
 
     maintenance.id = uuid.v4().slice(0, 6).trim()
 
-    return await db.maintenance.create(maintenance, { transaction });
+    return db.maintenance.create(maintenance, { transaction });
 }
 
 module.exports = {

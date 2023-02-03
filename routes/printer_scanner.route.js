@@ -12,7 +12,9 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
     const _transaction = await transaction();
 
     try {
-        const [findBrand, createBrand] = await _findOrCreate(req.body.brand, _transaction)
+        const newBrand = { name: req.body.brand, type: 'printer_scanner' }
+
+        const [findBrand, createBrand] = await _findOrCreate(newBrand, _transaction)
 
         if (req.body.license_plate) {
             const findPlate = await _findByPlate(req.body.license_plate, _transaction)
@@ -20,13 +22,9 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
             if (findPlate) throw Error('La placa de la impresora o scanner ya esta registrada.')
         }
 
-        let data;
+        const data = { ...req.body, brand_id: findBrand.id ?? createBrand.id }
 
-        if (findBrand) {
-            data = { ...req.body, brand_id: findBrand.id }
-        } else {
-            data = { ...req.body, brand_id: createBrand.id }
-        }
+        console.log(data)
 
         const equipment = await _create(data, _transaction)
 
@@ -91,7 +89,9 @@ router.put(`/${baseUrl}/update`, verifyAdmin, async (req, res) => {
         const { brand } = data;
 
         if (brand) {
-            const [findBrand, createBrand] = await _findOrCreate(brand, _transaction)
+            const newBrand = { name: brand, type: 'printer_scanner' }
+
+            const [findBrand, createBrand] = await _findOrCreate(newBrand, _transaction)
 
             if (findBrand) {
                 data = { ...data, brand_id: findBrand.id }

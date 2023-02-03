@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize-oracle')
+const { CAMPUS, AREAS } = require('../config')
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('equipment', {
@@ -90,13 +91,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             validate: {
                 isIn: {
-                    args: [[
-                        'VALLEDUPAR',
-                        'AGUACHICA',
-                        'CURUMANI',
-                        'CHIMICHAGUA',
-                        'JAGUA DE IBIRICO',
-                    ]],
+                    args: [CAMPUS],
                     msg: 'La sede no es valida.'
                 }
             }
@@ -107,22 +102,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             validate: {
                 isIn: {
-                    args: [[
-                        'DIRECCIÓN GENERAL',
-                        'SECRETARIA GENERAL',
-                        'OFICINA JURÍDICA',
-                        'OFICINA CONTROL INTERNO',
-                        'ASESOR DIRECCIÓN GENERAL',
-                        'OFICINA DE SISTEMAS Y TICS',
-                        'SUBDIRECCIÓN GENERAL ÁREA DE PLANEACIÓN',
-                        'SUBDIRECCIÓN GENERAL ÁREA DE GESTIÓN AMBIENTAL',
-                        'SUBDIRECCIÓN GENERAL ÁREA ADMINISTRATIVA Y FINANCIERA',
-                        'GESTIÓN FINANCIERA',
-                        'CONTABILIDAD',
-                        'TESORERIA',
-                        'PAGADURIA',
-                        'VENTANILLA ÚNICA',
-                    ]],
+                    args: [AREAS],
                     msg: 'La area no es valida.'
                 }
             }

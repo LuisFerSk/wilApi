@@ -1,30 +1,30 @@
 const db = require('../../models')
 const bcrypt = require('bcrypt');
 
-async function createSupport(user) {
+function createSupport(user) {
     if (!user.username) throw new Error('Falta el nombre de usuario.')
     if (!user.password) throw new Error('Falta la contraseña.')
 
-    return await db.user.create({
+    return db.user.create({
         ...user,
         password: bcrypt.hashSync(user.password, 10),
         role: 'support'
     });
 }
 
-async function createAdministrator(user) {
+function createAdministrator(user) {
     if (!user.username) throw new Error('Falta el nombre de usuario.')
     if (!user.password) throw new Error('Falta la contraseña.')
 
-    return await db.user.create({
+    return db.user.create({
         ...user,
         password: bcrypt.hashSync(user.password, 10),
         role: 'administrator'
     });
 }
 
-async function initAdministrator() {
-    return await db.user.findOrCreate({
+function initAdministrator() {
+    return db.user.findOrCreate({
         where: { username: 'admin' },
         defaults: {
             username: 'admin',

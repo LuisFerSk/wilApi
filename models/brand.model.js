@@ -18,6 +18,17 @@ module.exports = (sequelize, DataTypes) => {
                 }
             },
         },
+        type: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validate: {
+                isIn: {
+                    args: [['equipment', 'printer_scanner']],
+                    msg: 'El tipo de marca no es valida.'
+                }
+            },
+        }
     }, {
         underscored: true,
         paranoid: true

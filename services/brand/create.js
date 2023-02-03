@@ -1,15 +1,20 @@
 const db = require('../../models')
 
-async function findOrCreate(nameBrand) {
-    if (typeof nameBrand !== 'string') throw new Error('El nombre de la marca debe ser una cadena de texto.')
+function findOrCreate(brand) {
 
-    const nameBrandUpperCase = nameBrand.toUpperCase()
+    const { name, type } = brand;
 
-    return await db.brand.findOrCreate({
-        where: { name: nameBrandUpperCase },
-        defaults: {
-            name: nameBrandUpperCase,
-        }
+    if (typeof name !== 'string') throw new Error('El nombre de la marca debe ser una cadena de texto.')
+    if (typeof type !== 'string') throw new Error('El nombre de la marca debe ser una cadena de texto.')
+
+    const newBrand = {
+        name: name.toUpperCase(),
+        type
+    }
+
+    return db.brand.findOrCreate({
+        where: newBrand,
+        defaults: newBrand
     })
 }
 

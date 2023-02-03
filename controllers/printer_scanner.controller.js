@@ -1,6 +1,6 @@
 const { create } = require('../services/printer_scanner/create')
 const { destroy } = require('../services/printer_scanner/destroy')
-const { findAll, findOne } = require('../services/printer_scanner/find')
+const { findAll, findOne, findByPlate } = require('../services/printer_scanner/find')
 const { update } = require('../services/printer_scanner/update')
 
 function _create(printer_scanner, transaction = undefined) {

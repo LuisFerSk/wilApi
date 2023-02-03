@@ -1,7 +1,7 @@
 const db = require('../../models')
 const bcrypt = require('bcrypt')
 
-async function updatePassword(user) {
+function updatePassword(user) {
     const { id, password } = user;
 
     if (!id) throw new Error('Falta el id del usuario.')
@@ -9,7 +9,7 @@ async function updatePassword(user) {
 
     const newUser = { password: bcrypt.hashSync(password, 10) }
 
-    return await db.user.update(newUser, {
+    return db.user.update(newUser, {
         where: {
             id,
             deleted_at: null

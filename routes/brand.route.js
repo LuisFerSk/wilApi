@@ -1,14 +1,28 @@
 const express = require('express')
-const { _findAll } = require('../controllers/brand.controller')
+const { _findAllByEquipment, _findAllByPrinterScanner } = require('../controllers/brand.controller')
 const { verifyUser } = require('../middleware/authjwt')
 
 const router = express.Router()
 
 const baseUrl = 'brand'
 
-router.get(`/${baseUrl}/find-all`, verifyUser, async (req, res) => {
+router.get(`/${baseUrl}/find-all-by-equipment`, verifyUser, async (req, res) => {
     try {
-        const brands = await _findAll()
+        const brands = await _findAllByEquipment()
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Las marcas se consultaron correctamente correctamente.',
+            info: brands
+        })
+    } catch (error) {
+        return res.status(500).json(error.message);
+    }
+})
+
+router.get(`/${baseUrl}/find-all-by-printer-scanner`, verifyUser, async (req, res) => {
+    try {
+        const brands = await _findAllByPrinterScanner()
 
         return res.status(200).json({
             status: 'success',
