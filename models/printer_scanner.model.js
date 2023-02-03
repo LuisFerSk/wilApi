@@ -82,11 +82,6 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        flat: {
-            type: Sequelize.INTEGER,
-            required: true,
-            allowNull: false,
-        },
         user: {
             type: Sequelize.STRING,
             required: true,
