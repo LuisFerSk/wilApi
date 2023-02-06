@@ -8,29 +8,39 @@ const router = express.Router()
 
 const baseUrl = 'printer_scanner'
 
+function normalizeErrors(error, res) {
+    const errorMessage = error.message;
+
+    if (errorMessage.includes(`${baseUrl}_cc`) && errorMessage.includes('ORA-00001')) return res.status(500).json('La cédula ya ha sido registrada para otro usuario.')
+
+    if (errorMessage.includes(`${baseUrl}_serial`) && errorMessage.includes('ORA-00001')) return res.status(500).json('El serial ya ha sido registrado para otro equipo.')
+
+    if (errorMessage.includes(`${baseUrl}_license_plate`) && errorMessage.includes('ORA-00001')) return res.status(500).json('La placa ya ha sido registrada para otro equipo.')
+
+    return res.status(500).json(errorMessage.replaceAll('Validation error: ', '').replaceAll('.', '').concat('.'));
+}
+
+function createDataBrand(name) {
+    return { name, type: baseUrl }
+}
+
 router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
     const _transaction = await transaction();
 
     try {
-        const newBrand = { name: req.body.brand, type: 'printer_scanner' }
+        const newBrand = createDataBrand(req.body.brand)
 
         const [findBrand, createBrand] = await _findOrCreate(newBrand, _transaction)
 
-        if (req.body.license_plate) {
-            const findPlate = await _findByPlate(req.body.license_plate, _transaction)
+        const brand = findBrand || createBrand;
 
-            if (findPlate) throw Error('La placa de la impresora o scanner ya esta registrada.')
-        }
-
-        const data = { ...req.body, brand_id: findBrand.id ?? createBrand.id }
-
-        console.log(data)
+        const data = { ...req.body, brand_id: brand.id }
 
         const equipment = await _create(data, _transaction)
 
         const _equipment = await _findOne(equipment.id)
 
-        await _transaction.commit()
+        _transaction.commit()
 
         return res.status(201).json({
             status: 'success',
@@ -38,19 +48,9 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
             info: _equipment
         })
     } catch (error) {
-        await _transaction.rollback()
+        _transaction.rollback()
 
-        const errorMessage = error.message;
-
-        if (errorMessage.includes('_cc)') && errorMessage.includes('ORA-00001')) {
-            return res.status(500).json('La cédula ya ha sido registrada para otro usuario.')
-        }
-
-        if (errorMessage.includes('_serial)') && errorMessage.includes('ORA-00001')) {
-            return res.status(500).json('El serial ya ha sido registrado para otra impresora o scanner.')
-        }
-
-        return res.status(500).json(errorMessage.replaceAll('Validation error: ', '').replaceAll('.', '').concat('.'));
+        normalizeErrors(error, res)
     }
 })
 
@@ -74,37 +74,27 @@ router.put(`/${baseUrl}/update`, verifyAdmin, async (req, res) => {
     try {
         const foundEquipment = await _findOne(req.body.id)
 
-        if (!foundEquipment) {
-            return res.status(400).json(`La impresora o scanner no existe.`)
-        }
+        if (!foundEquipment) return res.status(400).json(`La impresora o scanner no existe.`)
 
         let data = req.body;
-
-        if (data.license_plate) {
-            const findPlate = await _findByPlate(data.license_plate, _transaction)
-
-            if (findPlate) throw Error('La placa de la impresora o scanner ya esta registrada.')
-        }
 
         const { brand } = data;
 
         if (brand) {
-            const newBrand = { name: brand, type: 'printer_scanner' }
+            const newBrand = createDataBrand(req.body.brand)
 
             const [findBrand, createBrand] = await _findOrCreate(newBrand, _transaction)
 
-            if (findBrand) {
-                data = { ...data, brand_id: findBrand.id }
-            } else {
-                data = { ...data, brand_id: createBrand.id }
-            }
+            const brand = findBrand || createBrand;
+
+            data = { ...req.body, brand_id: brand.id }
         }
 
         await _update(data)
 
         const _equipment = await _findOne(req.body.id)
 
-        await _transaction.commit()
+        _transaction.commit()
 
         return res.status(200).json({
             status: 'success',
@@ -112,19 +102,9 @@ router.put(`/${baseUrl}/update`, verifyAdmin, async (req, res) => {
             info: _equipment
         })
     } catch (error) {
-        await _transaction.rollback()
+        _transaction.rollback()
 
-        const errorMessage = error.message;
-
-        if (errorMessage.includes('_cc)') && errorMessage.includes('ORA-00001')) {
-            return res.status(500).json('La cédula ya ha sido registrada para otro usuario.')
-        }
-
-        if (errorMessage.includes('_serial)') && errorMessage.includes('ORA-00001')) {
-            return res.status(500).json('El serial ya ha sido registrado para otra impresora o scanner.')
-        }
-
-        return res.status(500).json(errorMessage.replaceAll('Validation error: ', '').replaceAll('.', '').concat('.'));
+        normalizeErrors(error, res)
     }
 })
 

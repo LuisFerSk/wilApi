@@ -50,7 +50,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         license_plate: {
             type: Sequelize.STRING,
-            allowNull: true,
             validate: {
                 is: {
                     args: /^[0-9]+$/,
@@ -61,7 +60,6 @@ module.exports = (sequelize, DataTypes) => {
                     msg: 'La placa debe tener de 4 a 5 dígitos.'
                 },
             },
-
         },
         monitor_serial: {
             type: Sequelize.STRING,
@@ -126,6 +124,10 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
+            unique: {
+                args: true,
+                msg: 'La cédula del usuario ya esta registrada.'
+            },
             validate: {
                 is: {
                     args: /^[0-9]+$/,
@@ -162,6 +164,18 @@ module.exports = (sequelize, DataTypes) => {
             {
                 unique: true,
                 fields: ['serial']
+            },
+            {
+                unique: true,
+                fields: ['license_plate']
+            },
+            {
+                unique: true,
+                fields: ['monitor_license_plate']
+            },
+            {
+                unique: true,
+                fields: ['monitor_serial']
             }
         ]
     })

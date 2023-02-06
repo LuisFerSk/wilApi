@@ -33,11 +33,11 @@ app.listen(app.get('port'), () => {
 })
 
 
-const db = require('./models')
-db.sequelize
-    .sync({ force: true })
-    .then(() => console.log('Connection has been established successfully.'))
-    .catch(error => console.error('Unable to connect to the database:', error))
+// const db = require('./models')
+// db.sequelize
+//     .sync({ force: true })
+//     .then(() => console.log('Connection has been established successfully.'))
+//     .catch(error => console.error('Unable to connect to the database:', error))
 
 
 const { _initAdministrator } = require('./controllers/user.controller')

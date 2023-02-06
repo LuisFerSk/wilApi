@@ -131,12 +131,17 @@ module.exports = (sequelize, DataTypes) => {
         indexes: [
             {
                 unique: true,
-                fields: ['cc']
+                fields: ['cc'],
+                
             },
             {
                 unique: true,
                 fields: ['serial']
-            }
+            },
+            {
+                unique: true,
+                fields: ['license_plate']
+            },
         ]
     })
 }
