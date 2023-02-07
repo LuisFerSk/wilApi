@@ -40,5 +40,5 @@ db.sequelize
     .catch(error => console.error('Unable to connect to the database:', error))
 
 
-const { _initAdministrator } = require('./controllers/user.controller')
-_initAdministrator()
+// const { _initAdministrator } = require('./controllers/user.controller')
+// _initAdministrator()

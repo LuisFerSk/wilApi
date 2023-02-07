@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
                     msg: 'El nombre de usuario debe tener de 5 a 20 caracteres.'
                 }
             },
-
         },
         password: {
             type: Sequelize.STRING,
