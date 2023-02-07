@@ -11,11 +11,11 @@ const baseUrl = 'printer_scanner'
 function normalizeErrors(error, res) {
     const errorMessage = error.message;
 
-    if (errorMessage.includes(`${baseUrl}_cc`) && errorMessage.includes('ORA-00001')) return res.status(500).json('La cédula ya ha sido registrada para otro usuario.')
+    if (errorMessage.includes(`${baseUrl}s_cc`) && errorMessage.includes('ORA-00001')) return res.status(500).json('La cédula ya ha sido registrada para otro usuario.')
 
-    if (errorMessage.includes(`${baseUrl}_serial`) && errorMessage.includes('ORA-00001')) return res.status(500).json('El serial ya ha sido registrado para otro equipo.')
+    if (errorMessage.includes(`${baseUrl}s_serial`) && errorMessage.includes('ORA-00001')) return res.status(500).json('El serial ya ha sido registrado para otra impresora o scanner.')
 
-    if (errorMessage.includes(`${baseUrl}_license_plate`) && errorMessage.includes('ORA-00001')) return res.status(500).json('La placa ya ha sido registrada para otro equipo.')
+    if (errorMessage.includes(`${baseUrl}s_license_plate`) && errorMessage.includes('ORA-00001')) return res.status(500).json('La placa ya ha sido registrada para otra impresora o scanner.')
 
     return res.status(500).json(errorMessage.replaceAll('Validation error: ', '').replaceAll('.', '').concat('.'));
 }
