@@ -1,5 +1,6 @@
 const db = require('../../models')
 const bcrypt = require('bcrypt');
+const { ROLE_ADMINISTRATOR, ROLE_SUPPORT } = require('../../config');
 
 function createSupport(user) {
     if (!user.username) throw new Error('Falta el nombre de usuario.')
@@ -8,7 +9,7 @@ function createSupport(user) {
     return db.user.create({
         ...user,
         password: bcrypt.hashSync(user.password, 10),
-        role: 'support'
+        role: ROLE_SUPPORT
     });
 }
 
@@ -19,7 +20,7 @@ function createAdministrator(user) {
     return db.user.create({
         ...user,
         password: bcrypt.hashSync(user.password, 10),
-        role: 'administrator'
+        role: ROLE_ADMINISTRATOR
     });
 }
 
@@ -29,7 +30,7 @@ function initAdministrator() {
         defaults: {
             username: 'admin',
             password: bcrypt.hashSync('12345678', 10),
-            role: 'administrator'
+            role: ROLE_ADMINISTRATOR
         }
     })
 }
