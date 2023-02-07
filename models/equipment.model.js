@@ -124,10 +124,6 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-            unique: {
-                args: true,
-                msg: 'La cédula del usuario ya esta registrada.'
-            },
             validate: {
                 is: {
                     args: /^[0-9]+$/,
