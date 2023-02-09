@@ -26,7 +26,7 @@ router.post('/signup-administrator', async (req, res) => {
     }
 })
 
-router.post('/singin', async (req, res) => {
+router.post('/signin', async (req, res) => {
     try {
         const user = await _findByUsername(req.body.username)
 
