@@ -20,7 +20,7 @@ function decodeToken(req) {
 
     return {
         status: 'success',
-        mensaje: 'Token válido',
+        message: 'Token válido',
         info: decryptedToken
     }
 }
