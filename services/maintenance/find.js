@@ -50,20 +50,9 @@ const findMadePerDayProps = {
     order: ["date"],
 }
 
-function getFindMadePerDayBetween() {
-    const today = new Date()
-
-    return [formatDateApi(today, -31), formatDateApi(today)]
-}
-
 function findMadePerDay() {
     return db.maintenance.findAll({
         ...findMadePerDayProps,
-        where: {
-            date: {
-                $between: getFindMadePerDayBetween()
-            }
-        },
     })
 }
 
@@ -72,9 +61,6 @@ function findMadePerDayByUser(id) {
         ...findMadePerDayProps,
         where: {
             user_id: id,
-            date: {
-                $between: getFindMadePerDayBetween()
-            }
         },
     })
 }
