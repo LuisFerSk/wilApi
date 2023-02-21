@@ -19,8 +19,8 @@ function _destroy(id, transaction = undefined) {
     return destroy(id, transaction)
 }
 
-function _findOne(id) {
-    return findOne(id)
+function _findOne(id, transaction = undefined) {
+    return findOne(id, transaction)
 }
 
 function _findByPlate(plate, transaction = undefined) {

@@ -5,7 +5,7 @@ function destroy(id, transaction = undefined) {
         where: {
             id
         },
-        transaction
+        transaction,
     });
 }
 

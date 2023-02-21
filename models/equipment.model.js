@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize-oracle')
-const { CAMPUS, AREAS } = require('../config')
+const { CAMPUS, AREAS, RAM_MEMORY_TYPES, HARD_DRIVE_TYPES, PROCESSOR_TYPES } = require('../config')
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('equipment', {
@@ -25,6 +25,102 @@ module.exports = (sequelize, DataTypes) => {
                 }
             },
 
+        },
+        processor_type: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validate: {
+                isIn: {
+                    args: [PROCESSOR_TYPES],
+                    msg: 'El tipo de procesador no es valida.'
+                }
+            }
+        },
+        processor_model: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validate: {
+                len: {
+                    args: [2, 25],
+                    msg: 'El modelo del equipo debe ser una cadena de 2 a 25 caracteres.'
+                }
+            }
+        },
+        RAM_memory_capacity: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validate: {
+                is: {
+                    args: /^[0-9]+$/,
+                    msg: 'La capacidad de la memoria RAM solo puede contener números.'
+                },
+                len: {
+                    args: [1, 2],
+                    msg: 'La capacidad de la memoria RAM debe tener máximo 2 dígitos.'
+                }
+            }
+        },
+        RAM_memory_type: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validate: {
+                isIn: {
+                    args: [RAM_MEMORY_TYPES],
+                    msg: 'El tipo de memoria RAM no es valida.'
+                }
+            }
+        },
+        hard_drive_capacity_1: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validate: {
+                is: {
+                    args: /^[0-9]+$/,
+                    msg: 'La capacidad del disco duro 1 solo puede contener números.'
+                },
+                len: {
+                    args: [1, 4],
+                    msg: 'La capacidad del disco duro 1 debe tener máximo 4 dígitos.'
+                }
+            }
+        },
+        hard_drive_type_1: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validate: {
+                isIn: {
+                    args: [HARD_DRIVE_TYPES],
+                    msg: 'El tipo de disco duro 1 no es valida.'
+                }
+            }
+        },
+        hard_drive_capacity_2: {
+            type: Sequelize.STRING,
+            validate: {
+                is: {
+                    args: /^[0-9]+$/,
+                    msg: 'La capacidad del disco duro 2 solo puede contener números.'
+                },
+                len: {
+                    args: [1, 4],
+                    msg: 'La capacidad del disco duro 2 debe tener máximo 4 dígitos.'
+                }
+            }
+        },
+        hard_drive_type_2: {
+            type: Sequelize.STRING,
+            validate: {
+                isIn: {
+                    args: [HARD_DRIVE_TYPES],
+                    msg: 'El tipo de disco duro 2 no es valida.'
+                }
+            }
         },
         model: {
             type: Sequelize.STRING,
@@ -59,6 +155,32 @@ module.exports = (sequelize, DataTypes) => {
                     args: [4, 5],
                     msg: 'La placa debe tener de 4 a 5 dígitos.'
                 },
+            },
+        },
+        monitor_model: {
+            type: Sequelize.STRING,
+            validate: {
+                len: {
+                    args: [3, 25],
+                    msg: 'El modelo de monitor del equipo debe ser una cadena de 3 a 25 caracteres.'
+                }
+            }
+        },
+        date_of_purchase: {
+            type: Sequelize.DATE,
+            required: true,
+            allowNull: false,
+        },
+        warranty_end_date: {
+            type: Sequelize.DATE,
+            required: true,
+            allowNull: false,
+            validate: {
+                isEven: (value) => {
+                    if (value < this.date_of_purchase) {
+                        throw new Error('La fecha de finalización de la garantía no puede ser menor a la fecha de compra.')
+                    }
+                }
             },
         },
         monitor_serial: {

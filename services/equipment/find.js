@@ -6,7 +6,7 @@ function findAll() {
     })
 }
 
-function findOne(id) {
+function findOne(id, transaction = undefined) {
     if (!id) throw new Error('Falta el id del equipo.')
 
     return db.equipment.findOne({
@@ -14,7 +14,8 @@ function findOne(id) {
             id,
             // deleted_at: null
         },
-        include: [db.brand]
+        include: [db.brand],
+        transaction
     })
 }
 

@@ -29,10 +29,29 @@ const AREAS = [
     'VENTANILLA ÚNICA',
 ]
 
+const RAM_MEMORY_TYPES = [
+    'DDR2',
+    'DDR3',
+    'DDR4',
+]
+
+const HARD_DRIVE_TYPES = [
+    'HDD',
+    'SSD'
+]
+
+const PROCESSOR_TYPES = [
+    'AMD',
+    'INTEL'
+]
+
 module.exports = {
     SECRET,
     ROLE_ADMINISTRATOR,
     ROLE_SUPPORT,
     CAMPUS,
-    AREAS
+    AREAS,
+    RAM_MEMORY_TYPES,
+    HARD_DRIVE_TYPES,
+    PROCESSOR_TYPES
 }

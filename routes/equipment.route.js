@@ -119,7 +119,11 @@ router.delete(`/${baseUrl}/destroy`, verifyAdmin, async (req, res) => {
     try {
         const equipment_id = req.body.id
 
-        await _destroy(equipment_id, _transaction)
+        const row = await _findOne(equipment_id, _transaction)
+
+        if (!row) return res.status(404).json('El equipo no fue encontrado.')
+
+        await row.destroy({ force: true })
 
         const where = { equipment_id }
 
