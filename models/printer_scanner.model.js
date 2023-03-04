@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize-oracle')
-const { CAMPUS, AREAS } = require('../config')
+const Sequelize = require('sequelize')
+const { CAMPUS, AREAS, TYPES_PRINTER_SCANNER, ACQUIRED_BY, STATES } = require('../config')
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('printer_scanner', {
@@ -14,13 +14,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             validate: {
                 isIn: {
-                    args: [[
-                        'Impresora',
-                        'Imp Sencilla',
-                        'Imp Multifuncional Color',
-                        'Imp Multifuncional BN',
-                        'Scanner',
-                    ]],
+                    args: [TYPES_PRINTER_SCANNER],
                     msg: 'El tipo de impresora o scanner no es valido.'
                 }
             },
@@ -40,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
+            unique: true,
             validate: {
                 len: {
                     args: [3, 25],
@@ -47,8 +42,9 @@ module.exports = (sequelize, DataTypes) => {
                 }
             },
         },
-        license_plate: {
+        licensePlate: {
             type: Sequelize.STRING,
+            unique: true,
             validator: {
                 is: {
                     args: /^[0-9]+$/,
@@ -82,66 +78,62 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        user: {
+        owner: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
             validate: {
                 is: {
                     args: /^[a-zA-Z ]+$/,
-                    msg: 'El nombre del usuario solo puede contener letras.'
+                    msg: 'El nombre del propietario solo puede contener letras.'
                 },
                 len: {
                     args: [5, 50],
-                    msg: 'El nombre del usuario debe de ser una cadena de 5 a 50 caracteres.'
+                    msg: 'El nombre del propietario debe de ser una cadena de 5 a 50 caracteres.'
                 },
             },
         },
-        cc: {
+        state: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
             validate: {
-                is: {
-                    args: /^[0-9]+$/,
-                    msg: 'la cédula del usuario solo puede contener números.'
-                },
-                len: {
-                    args: [7, 11],
-                    msg: 'La cédula del usuario debe tener de 7 a 11 dígitos.'
+                isIn: {
+                    args: [STATES],
+                    msg: 'El estado no es valido.'
                 }
-            },
+            }
         },
-        phone: {
+        acquiredBy: {
             type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
             validate: {
-                is: {
-                    args: /^[0-9]+$/,
-                    msg: 'la teléfono del usuario solo puede contener números.'
-                },
-                len: {
-                    args: [7, 10],
-                    msg: 'El teléfono del usuario debe tener de 7 a 10 dígitos.'
+                isIn: {
+                    args: [ACQUIRED_BY],
+                    msg: 'El método de adquisición no es valido.'
+                }
+            }
+        },
+        ip: {
+            type: Sequelize.STRING,
+        },
+        dateOfPurchaseOrRental: {
+            type: Sequelize.DATE,
+            required: true,
+            allowNull: false,
+        },
+        warrantyEndDate: {
+            type: Sequelize.DATE,
+            validate: {
+                isGreaterThanOtherField: (value) => {
+                    if (value < this.date_of_purchase) {
+                        throw new Error('La fecha de finalización de la garantía no puede ser menor a la fecha de compra.')
+                    }
                 }
             },
         },
     }, {
         underscored: true,
-        paranoid: true,
-        indexes: [
-            {
-                unique: true,
-                fields: ['cc'],
-
-            },
-            {
-                unique: true,
-                fields: ['serial']
-            },
-            {
-                unique: true,
-                fields: ['license_plate']
-            },
-        ]
     })
 }

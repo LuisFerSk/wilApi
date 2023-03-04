@@ -1,14 +1,5 @@
 const db = require('../../models')
 
-function formatDateApi(date, daysSetting = 0) {
-    const dateFormat = new Date(date)
-
-    dateFormat.setDate(dateFormat.getDate() + daysSetting)
-    dateFormat.setHours(0, 0, 0, 0)
-
-    return dateFormat.toLocaleDateString()
-}
-
 const includeFindOne = [
     db.user,
     {
@@ -27,7 +18,7 @@ function findAllByUser(id) {
     return db.maintenance.findAll({
         include: includeFindOne,
         where: {
-            user_id: id
+            userId: id
         }
     });
 }
@@ -37,6 +28,16 @@ function findOne(id) {
         include: includeFindOne,
         where: {
             id
+        }
+    })
+}
+
+function findOneByUser(userId, id) {
+    return db.maintenance.findOne({
+        include: includeFindOne,
+        where: {
+            id,
+            userId
         }
     })
 }
@@ -73,4 +74,5 @@ module.exports = {
     findOne,
     findMadePerDay,
     findMadePerDayByUser,
+    findOneByUser,
 }

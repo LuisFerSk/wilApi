@@ -12,7 +12,6 @@ function updatePassword(user) {
     return db.user.update(newUser, {
         where: {
             id,
-            deleted_at: null
         }
     });
 }

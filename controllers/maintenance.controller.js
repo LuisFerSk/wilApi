@@ -1,37 +1,41 @@
 const { create } = require('../services/maintenance/create')
 const { destroy, destroyWhere } = require('../services/maintenance/destroy')
-const { findAll, findOne, findAllByUser, findMadePerDay, findMadePerDayByUser } = require('../services/maintenance/find')
+const { findAll, findOne, findAllByUser, findMadePerDay, findMadePerDayByUser, findOneByUser } = require('../services/maintenance/find')
 
-async function _create(maintenance) {
-    return await create(maintenance)
+function _create(maintenance, transaction = undefined) {
+    return create(maintenance, transaction)
 }
 
-async function _findAll() {
-    return await findAll()
+function _findAll() {
+    return findAll()
 }
 
-async function _destroy(id) {
-    return await destroy(id)
+function _destroy(id, transaction = undefined) {
+    return destroy(id, transaction)
 }
 
-async function _findOne(id) {
-    return await findOne(id)
+function _findOne(id) {
+    return findOne(id)
 }
 
-async function _findAllByUser(id) {
-    return await findAllByUser(id)
+function _findOneByUser(userId, maintenanceId) {
+    return findOneByUser(userId, maintenanceId)
 }
 
-async function _destroyWhere(where, transaction = undefined) {
-    return await destroyWhere(where, transaction)
+function _findAllByUser(id) {
+    return findAllByUser(id)
 }
 
-async function _findMadePerDay() {
-    return await findMadePerDay()
+function _destroyWhere(where, transaction = undefined) {
+    return destroyWhere(where, transaction)
 }
 
-async function _findMadePerDayByUser(id) {
-    return await findMadePerDayByUser(id)
+function _findMadePerDay() {
+    return findMadePerDay()
+}
+
+function _findMadePerDayByUser(id) {
+    return findMadePerDayByUser(id)
 }
 
 module.exports = {
@@ -43,4 +47,5 @@ module.exports = {
     _destroyWhere,
     _findMadePerDay,
     _findMadePerDayByUser,
+    _findOneByUser,
 }

@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize-oracle')
-const { CAMPUS, AREAS, RAM_MEMORY_TYPES, HARD_DRIVE_TYPES, PROCESSOR_TYPES } = require('../config')
+const Sequelize = require('sequelize')
+const { CAMPUS, AREAS, RAM_MEMORY_TYPES, HARD_DRIVE_TYPES, PROCESSOR_TYPES, TYPES_EQUIPMENT, STATES } = require('../config')
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('equipment', {
@@ -14,19 +14,13 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             validate: {
                 isIn: {
-                    args: [[
-                        'All in one',
-                        'Desktop',
-                        'Laptop',
-                        'Workstation',
-                        'Tablet iOS',
-                    ]],
+                    args: [TYPES_EQUIPMENT],
                     msg: 'El tipo de equipo no es valido.'
                 }
             },
 
         },
-        processor_type: {
+        processorType: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
@@ -37,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        processor_model: {
+        processorModel: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
@@ -48,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        RAM_memory_capacity: {
+        ramMemoryCapacity: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
@@ -63,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        RAM_memory_type: {
+        ramMemoryType: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
@@ -74,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        hard_drive_capacity_1: {
+        hardDriveCapacity_1: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
@@ -89,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        hard_drive_type_1: {
+        hardDriveType_1: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
@@ -100,7 +94,7 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        hard_drive_capacity_2: {
+        hardDriveCapacity_2: {
             type: Sequelize.STRING,
             validate: {
                 is: {
@@ -113,7 +107,7 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        hard_drive_type_2: {
+        hardDriveType_2: {
             type: Sequelize.STRING,
             validate: {
                 isIn: {
@@ -135,6 +129,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         serial: {
             type: Sequelize.STRING,
+            unique: true,
             required: true,
             allowNull: false,
             validate: {
@@ -144,8 +139,9 @@ module.exports = (sequelize, DataTypes) => {
                 }
             },
         },
-        license_plate: {
+        licensePlate: {
             type: Sequelize.STRING,
+            unique: true,
             validate: {
                 is: {
                     args: /^[0-9]+$/,
@@ -157,7 +153,7 @@ module.exports = (sequelize, DataTypes) => {
                 },
             },
         },
-        monitor_model: {
+        monitorModel: {
             type: Sequelize.STRING,
             validate: {
                 len: {
@@ -166,25 +162,26 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        date_of_purchase: {
+        dateOfPurchase: {
             type: Sequelize.DATE,
             required: true,
             allowNull: false,
         },
-        warranty_end_date: {
+        warrantyEndDate: {
             type: Sequelize.DATE,
             required: true,
             allowNull: false,
             validate: {
-                isEven: (value) => {
+                isGreaterThanOtherField: (value) => {
                     if (value < this.date_of_purchase) {
                         throw new Error('La fecha de finalización de la garantía no puede ser menor a la fecha de compra.')
                     }
                 }
             },
         },
-        monitor_serial: {
+        monitorSerial: {
             type: Sequelize.STRING,
+            unique: true,
             validate: {
                 len: {
                     args: [3, 25],
@@ -192,8 +189,9 @@ module.exports = (sequelize, DataTypes) => {
                 }
             }
         },
-        monitor_license_plate: {
+        monitorLicensePlate: {
             type: Sequelize.STRING,
+            unique: true,
             validate: {
                 is: {
                     args: /^[0-9]+$/,
@@ -246,6 +244,7 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
+            unique: true,
             validate: {
                 is: {
                     args: /^[0-9]+$/,
@@ -270,31 +269,18 @@ module.exports = (sequelize, DataTypes) => {
                 }
             },
         },
-
+        state: {
+            type: Sequelize.STRING,
+            required: true,
+            allowNull: false,
+            validate: {
+                isIn: {
+                    args: [STATES],
+                    msg: 'El estado no es valido.'
+                }
+            }
+        }
     }, {
         underscored: true,
-        paranoid: true,
-        indexes: [
-            {
-                unique: true,
-                fields: ['cc']
-            },
-            {
-                unique: true,
-                fields: ['serial']
-            },
-            {
-                unique: true,
-                fields: ['license_plate']
-            },
-            {
-                unique: true,
-                fields: ['monitor_license_plate']
-            },
-            {
-                unique: true,
-                fields: ['monitor_serial']
-            }
-        ]
     })
 }

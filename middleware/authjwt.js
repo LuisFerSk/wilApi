@@ -18,11 +18,7 @@ function decodeToken(req) {
         throw new Error('Token no valido')
     }
 
-    return {
-        status: 'success',
-        message: 'Token válido',
-        info: decryptedToken
-    }
+    return decryptedToken;
 }
 
 async function verifyUser(req, res, next = () => { }) {
@@ -31,7 +27,7 @@ async function verifyUser(req, res, next = () => { }) {
     try {
         decryptedToken = decodeToken(req);
 
-        const { info: { id } } = decryptedToken;
+        const { id } = decryptedToken;
 
         const user = await _findById(id)
 
@@ -49,13 +45,13 @@ async function verifyAdmin(req, res, next) {
     try {
         decryptedToken = decodeToken(req);
 
-        const { info: { id } } = decryptedToken;
+        const { id } = decryptedToken;
 
         const user = await _findById(id)
 
         if (!user) return res.status(400).json('El token ya expiro.')
         if (user.role !== ROLE_ADMINISTRATOR) return res.status(400).json('No tienes permisos para realizar esta acción.')
-        
+
         next()
     } catch (error) {
         return res.status(500).json(error.message);

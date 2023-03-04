@@ -1,7 +1,8 @@
+const jwt = require('jsonwebtoken');
+
 const express = require('express')
 const { _findByUsername, _createAdministrator, _findById } = require('../controllers/user.controller')
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken');
 const { SECRET } = require('../config');
 const { decodeToken } = require('../middleware/authjwt');
 
@@ -17,10 +18,7 @@ router.post('/signup-administrator', async (req, res) => {
 
         const user = await _createAdministrator(req.body)
 
-        return res.status(201).json({
-            status: 'success',
-            message: `El usuario ${user.username} fue creado correctamente.`
-        })
+        return res.status(201).json(`El usuario ${user.username} fue creado correctamente.`)
     } catch (error) {
         return res.status(500).json(error.message);
     }
@@ -50,12 +48,7 @@ router.post('/signin', async (req, res) => {
 
         const token = jwt.sign(dataToken, SECRET, { expiresIn: '1d' });
 
-        return res.status(200).json({
-            status: 'success',
-            message: 'El usuario ha iniciado sesión correctamente.',
-            info: { ...basicUser },
-            token
-        })
+        return res.status(200).json({ token })
     } catch (error) {
         return res.status(500).json(error.message);
     }
@@ -67,7 +60,7 @@ router.get('/verify-token', async (req, res) => {
     try {
         decryptedToken = decodeToken(req);
 
-        const { info: { id } } = decryptedToken;
+        const { id } = decryptedToken;
 
         const user = await _findById(id)
 

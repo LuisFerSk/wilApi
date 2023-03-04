@@ -1,4 +1,5 @@
-const Sequelize = require('sequelize-oracle')
+const Sequelize = require('sequelize')
+const { QUESTION_OPTIONS } = require('../config')
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('maintenance', {
@@ -20,23 +21,32 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
+            validate: {
+                len: {
+                    args: [2, 50],
+                    msg: 'La ciudad debe ser una cadena de 2 a 50 caracteres.'
+                }
+            }
         },
         workstation: {
             type: Sequelize.STRING,
             validate: {
-                len: [3, 30]
+                len: {
+                    args: [3, 30],
+                    msg: 'La estación de trabajo debe ser una cadena de 3 a 30 caracteres.'
+                }
             }
         },
-        ignition_station: {
+        ignitionStation: {
             type: Sequelize.BOOLEAN,
         },
-        operating_system_boot: {
+        operatingSystemBoot: {
             type: Sequelize.BOOLEAN,
         },
         HDD: {
             type: Sequelize.BOOLEAN,
         },
-        CD_rom_DVD: {
+        cdRomDvd: {
             type: Sequelize.BOOLEAN,
         },
         display: {
@@ -48,81 +58,113 @@ module.exports = (sequelize, DataTypes) => {
         keyboard: {
             type: Sequelize.BOOLEAN,
         },
-        remove_indoor_dust: {
+        removeIndoorDust: {
             type: Sequelize.BOOLEAN,
         },
-        check_internal_connections: {
+        checkInternalConnections: {
             type: Sequelize.BOOLEAN,
         },
-        clean_keyboard: {
+        cleanKeyboard: {
             type: Sequelize.BOOLEAN,
         },
-        clean_monitor: {
+        cleanMonitor: {
             type: Sequelize.BOOLEAN,
         },
-        clean_mouse: {
+        cleanMouse: {
             type: Sequelize.BOOLEAN,
         },
-        connect_power_peripheral_cables: {
+        connectPowerPeripheralCables: {
             type: Sequelize.BOOLEAN,
         },
-        close_PC_clean_case: {
+        closePcCleanCase: {
             type: Sequelize.BOOLEAN,
         },
-        end_ignition_station: {
+        endIgnitionStation: {
             type: Sequelize.BOOLEAN,
         },
-        end_operating_system_boot: {
+        endOperatingSystemBoot: {
             type: Sequelize.BOOLEAN,
         },
-        end_HDD: {
+        endHdd: {
             type: Sequelize.BOOLEAN,
         },
-        end_CD_rom_DVD: {
+        endCdRomDvd: {
             type: Sequelize.BOOLEAN,
         },
-        end_display: {
+        endDisplay: {
             type: Sequelize.BOOLEAN,
         },
-        end_mouse: {
+        endMouse: {
             type: Sequelize.BOOLEAN,
         },
-        end_keyboard: {
+        endKeyboard: {
             type: Sequelize.BOOLEAN,
         },
-        error_description: {
-            type: Sequelize.STRING,
-        },
-        end_error_description: {
+        errorDescription: {
             type: Sequelize.STRING,
             validate: {
-                len: [0, 200]
+                len: {
+                    args: [0, 200],
+                    msg: 'La descripción del error encontrado debe ser una cadena de máximo 200 caracteres.'
+                }
             }
         },
-        check_anti_virus: {
-            type: Sequelize.BOOLEAN,
-        },
-        deletion_temporary_cookies: {
-            type: Sequelize.BOOLEAN,
-        },
-        disk_defragmentation: {
-            type: Sequelize.BOOLEAN,
-        },
-        equipment_delivery: {
-            type: Sequelize.BOOLEAN,
-        },
-        Q1: {
+        endErrorDescription: {
             type: Sequelize.STRING,
+            validate: {
+                len: {
+                    args: [0, 200],
+                    msg: 'La descripción final del error encontrado debe ser una cadena de máximo 200 caracteres.'
+                }
+            }
         },
-        Q2: {
-            type: Sequelize.STRING,
+        checkAntiVirus: {
+            type: Sequelize.BOOLEAN,
         },
-        Q3: {
+        deletionTemporaryCookies: {
+            type: Sequelize.BOOLEAN,
+        },
+        diskDefragmentation: {
+            type: Sequelize.BOOLEAN,
+        },
+        equipmentDelivery: {
+            type: Sequelize.BOOLEAN,
+        },
+        question_1: {
             type: Sequelize.STRING,
-            allowNull: true,
+            validate: {
+                isIn: {
+                    args: [QUESTION_OPTIONS],
+                    msg: 'La respuesta de la primera pregunta no es valida.'
+                }
+            }
+        },
+        question_2: {
+            type: Sequelize.STRING,
+            validate: {
+                isIn: {
+                    args: [QUESTION_OPTIONS],
+                    msg: 'La respuesta de la segunda pregunta no es valida.'
+                }
+            }
+        },
+        question_3: {
+            type: Sequelize.STRING,
+            validate: {
+                isIn: {
+                    args: [QUESTION_OPTIONS],
+                    msg: 'La respuesta de la tercera pregunta no es valida.'
+                }
+            }
         },
         observations: {
             type: Sequelize.STRING,
+            validate: {
+                len: {
+                    args: [0, 200],
+                    msg: 'Las observaciones debe ser una cadena de máximo 200 caracteres.'
+                }
+            }
         },
         signature: {
             type: Sequelize.STRING,
@@ -131,6 +173,5 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         underscored: true,
-        paranoid: true,
     })
 }

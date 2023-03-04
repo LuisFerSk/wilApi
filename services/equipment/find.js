@@ -2,7 +2,7 @@ const db = require('../../models')
 
 function findAll() {
     return db.equipment.findAll({
-        include: [db.brand]
+        include: db.brand
     })
 }
 
@@ -12,22 +12,8 @@ function findOne(id, transaction = undefined) {
     return db.equipment.findOne({
         where: {
             id,
-            // deleted_at: null
         },
-        include: [db.brand],
-        transaction
-    })
-}
-
-function findByPlate(plate, transaction = undefined) {
-    if (!plate) throw new Error('Falta la placa del equipo.')
-
-    return db.equipment.findOne({
-        where: {
-            license_plate: plate,
-            // deleted_at: null
-        },
-        include: [db.brand],
+        include: db.brand,
         transaction
     })
 }
@@ -35,5 +21,4 @@ function findByPlate(plate, transaction = undefined) {
 module.exports = {
     findAll,
     findOne,
-    findByPlate,
 }

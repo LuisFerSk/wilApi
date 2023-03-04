@@ -1,24 +1,12 @@
 const express = require('express')
 const { _findOrCreate } = require('../controllers/brand.controller')
 const { transaction } = require('../controllers/db.controller')
-const { _create, _findAll, _update, _destroy, _findOne, _findByPlate } = require('../controllers/printer_scanner.controller')
+const { _create, _findAll, _update, _findOne } = require('../controllers/printer_scanner.controller')
 const { verifyUser, verifyAdmin } = require('../middleware/authjwt')
 
 const router = express.Router()
 
 const baseUrl = 'printer_scanner'
-
-function normalizeErrors(error, res) {
-    const errorMessage = error.message;
-
-    if (errorMessage.includes(`${baseUrl}s_cc`) && errorMessage.includes('ORA-00001')) return res.status(500).json('La cédula ya ha sido registrada para otro usuario.')
-
-    if (errorMessage.includes(`${baseUrl}s_serial`) && errorMessage.includes('ORA-00001')) return res.status(500).json('El serial ya ha sido registrado para otra impresora o scanner.')
-
-    if (errorMessage.includes(`${baseUrl}s_license_plate`) && errorMessage.includes('ORA-00001')) return res.status(500).json('La placa ya ha sido registrada para otra impresora o scanner.')
-
-    return res.status(500).json(errorMessage.replaceAll('Validation error: ', '').replaceAll('.', '').concat('.'));
-}
 
 function createDataBrand(name) {
     return { name, type: baseUrl }
@@ -34,35 +22,39 @@ router.post(`/${baseUrl}/create`, verifyUser, async (req, res) => {
 
         const brand = findBrand || createBrand;
 
-        const data = { ...req.body, brand_id: brand.id }
+        const data = { ...req.body, brandId: brand.id }
 
-        const equipment = await _create(data, _transaction)
+        delete data.brand;
 
-        const _equipment = await _findOne(equipment.id)
+        await _create(data, _transaction)
 
         _transaction.commit()
 
-        return res.status(201).json({
-            status: 'success',
-            message: `La impresora o scanner fue creado correctamente.`,
-            info: _equipment
-        })
+        return res.status(201).json('Se ha creado correctamente la impresora o scanner.')
     } catch (error) {
         _transaction.rollback()
 
-        normalizeErrors(error, res)
+        return res.status(500).json(error.message)
+    }
+})
+
+router.get(`/${baseUrl}/find/:id`, verifyUser, async (req, res) => {
+    try {
+        const printerScanner = await _findOne(req.params.id)
+
+        if (!printerScanner) return res.status(404).json('No se encontró la impresora o scanner.')
+
+        return res.status(200).json(equipment)
+    } catch (error) {
+        return res.status(500).json(error.message);
     }
 })
 
 router.get(`/${baseUrl}/find-all`, verifyUser, async (req, res) => {
     try {
-        const equipments = await _findAll()
+        const printerScanner = await _findAll()
 
-        return res.status(200).json({
-            status: 'success',
-            message: 'Las impresoras y scanners se consultaron correctamente correctamente.',
-            info: equipments
-        })
+        return res.status(200).json(printerScanner)
     } catch (error) {
         return res.status(500).json(error.message);
     }
@@ -72,52 +64,47 @@ router.put(`/${baseUrl}/update`, verifyAdmin, async (req, res) => {
     const _transaction = await transaction();
 
     try {
-        const foundEquipment = await _findOne(req.body.id)
+        const foundPrinterScanner = await _findOne(req.body.id)
 
-        if (!foundEquipment) return res.status(400).json(`La impresora o scanner no existe.`)
+        if (!foundPrinterScanner) return res.status(400).json(`La impresora o scanner no existe.`)
 
         let data = req.body;
 
         const { brand } = data;
+
+        delete data.brand;
 
         if (brand) {
             const newBrand = createDataBrand(req.body.brand)
 
             const [findBrand, createBrand] = await _findOrCreate(newBrand, _transaction)
 
-            const brand = findBrand || createBrand;
+            const _brand = findBrand || createBrand;
 
-            data = { ...req.body, brand_id: brand.id }
+            data = { ...req.body, brandId: _brand.id }
         }
 
         await _update(data)
 
-        const _equipment = await _findOne(req.body.id)
-
         _transaction.commit()
 
-        return res.status(200).json({
-            status: 'success',
-            message: 'La impresora o scanner se actualizo correctamente correctamente.',
-            info: _equipment
-        })
+        return res.status(200).json('La impresora o scanner se actualizo correctamente correctamente.')
     } catch (error) {
         _transaction.rollback()
 
-        normalizeErrors(error, res)
+        return res.status(500).json(error.message)
     }
 })
 
 router.delete(`/${baseUrl}/destroy`, verifyAdmin, async (req, res) => {
     try {
-        const equipment_id = req.body.id
+        const row = await _findOne(req.body.id)
 
-        await _destroy(equipment_id)
+        if (!row) return res.status(404).json('La impresora o scanner no fue encontrado.')
 
-        return res.status(200).json({
-            status: 'success',
-            message: 'La impresora o scanner se elimino correctamente correctamente.',
-        })
+        await row.destroy()
+
+        return res.status(200).json('La impresora o scanner se elimino correctamente correctamente.')
     } catch (error) {
         return res.status(500).json(error.message);
     }

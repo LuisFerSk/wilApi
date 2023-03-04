@@ -45,6 +45,38 @@ const PROCESSOR_TYPES = [
     'INTEL'
 ]
 
+const TYPES_EQUIPMENT = [
+    'All in one',
+    'Desktop',
+    'Laptop',
+    'Workstation',
+    'Tablet iOS',
+]
+
+const TYPES_PRINTER_SCANNER = [
+    'Impresora',
+    'Imp Sencilla',
+    'Imp Multifuncional Color',
+    'Imp Multifuncional BN',
+    'Scanner',
+]
+
+const STATES = [
+    'activo',
+    'inactivo'
+]
+
+const ACQUIRED_BY = [
+    'compra',
+    'renta'
+]
+
+const QUESTION_OPTIONS = [
+    'buena',
+    'regular',
+    'malo'
+]
+
 module.exports = {
     SECRET,
     ROLE_ADMINISTRATOR,
@@ -53,5 +85,10 @@ module.exports = {
     AREAS,
     RAM_MEMORY_TYPES,
     HARD_DRIVE_TYPES,
-    PROCESSOR_TYPES
+    PROCESSOR_TYPES,
+    TYPES_EQUIPMENT,
+    TYPES_PRINTER_SCANNER,
+    STATES,
+    ACQUIRED_BY,
+    QUESTION_OPTIONS
 }

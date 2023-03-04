@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize-oracle')
+const Sequelize = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
     return sequelize.define('brand', {
@@ -31,6 +31,5 @@ module.exports = (sequelize, DataTypes) => {
         }
     }, {
         underscored: true,
-        paranoid: true,
     })
 }
