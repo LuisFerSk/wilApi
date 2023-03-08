@@ -44,7 +44,7 @@ router.get(`/${baseUrl}/find/:id`, verifyUser, async (req, res) => {
 
         if (!printerScanner) return res.status(404).json('No se encontró la impresora o scanner.')
 
-        return res.status(200).json(equipment)
+        return res.status(200).json(printerScanner)
     } catch (error) {
         return res.status(500).json(error.message);
     }
