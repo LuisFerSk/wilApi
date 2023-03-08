@@ -9,25 +9,17 @@ function decodeToken(req) {
 
     if (typeof token !== "string") throw new Error('Token no valido')
 
-    let decryptedToken;
-
     try {
-        decryptedToken = jwt.verify(token, SECRET)
+        return jwt.verify(token, SECRET)
     }
     catch (err) {
         throw new Error('Token no valido')
     }
-
-    return decryptedToken;
 }
 
 async function verifyUser(req, res, next = () => { }) {
-    let decryptedToken;
-
     try {
-        decryptedToken = decodeToken(req);
-
-        const { id } = decryptedToken;
+        const { id } = decodeToken(req);
 
         const user = await _findById(id)
 
@@ -40,17 +32,14 @@ async function verifyUser(req, res, next = () => { }) {
 }
 
 async function verifyAdmin(req, res, next) {
-    let decryptedToken;
-
     try {
-        decryptedToken = decodeToken(req);
-
-        const { id } = decryptedToken;
+        const { id } = decodeToken(req);
 
         const user = await _findById(id)
 
         if (!user) return res.status(400).json('El token ya expiro.')
-        if (user.role !== ROLE_ADMINISTRATOR) return res.status(400).json('No tienes permisos para realizar esta acción.')
+
+        if (user.role !== ROLE_ADMINISTRATOR) return res.status(401).json('No tienes permisos para realizar esta acción.')
 
         next()
     } catch (error) {
